@@ -63,11 +63,10 @@ class Trie {
   fileprivate var root = TrieNode(letter: Character(" "))
 
   func insert(word: String) {
-    var currentNode = root
-    for ch in word.characters {
-      currentNode = currentNode.getOrCreateChildNode(letter: ch)
+    let node = word.characters.reduce(root) { (currentNode, ch) -> TrieNode in
+      return currentNode.getOrCreateChildNode(letter:ch)
     }
-    currentNode.isWord = true
+    node.isWord = true
   }
   
   func contains(word: String) -> Bool {
