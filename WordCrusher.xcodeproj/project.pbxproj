@@ -12,7 +12,18 @@
 		C782CC941EF97830003E6E49 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C782CC931EF97830003E6E49 /* ViewController.swift */; };
 		C782CC961EF97830003E6E49 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C782CC951EF97830003E6E49 /* Assets.xcassets */; };
 		C782CC991EF97830003E6E49 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C782CC971EF97830003E6E49 /* Main.storyboard */; };
+		C7EFEEA41EF97A42008D2F78 /* WordCrusherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7EFEEA31EF97A42008D2F78 /* WordCrusherTests.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C7EFEEA61EF97A42008D2F78 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C782CC861EF97830003E6E49 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C782CC8D1EF97830003E6E49;
+			remoteInfo = WordCrusher;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		12FF4C32E586CA0F1E13CD96 /* Pods-WordCrusher.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WordCrusher.release.xcconfig"; path = "Pods/Target Support Files/Pods-WordCrusher/Pods-WordCrusher.release.xcconfig"; sourceTree = "<group>"; };
@@ -23,6 +34,9 @@
 		C782CC951EF97830003E6E49 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C782CC981EF97830003E6E49 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C782CC9A1EF97830003E6E49 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C7EFEEA11EF97A42008D2F78 /* WordCrusherTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WordCrusherTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C7EFEEA31EF97A42008D2F78 /* WordCrusherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordCrusherTests.swift; sourceTree = "<group>"; };
+		C7EFEEA51EF97A42008D2F78 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EF09A1FFCDFD91A842B8BD4D /* Pods-WordCrusher.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WordCrusher.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WordCrusher/Pods-WordCrusher.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -32,6 +46,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				6F1E0EEA1E9F2B1215A39FCF /* Pods_WordCrusher.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C7EFEE9E1EF97A42008D2F78 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -51,6 +72,7 @@
 			isa = PBXGroup;
 			children = (
 				C782CC901EF97830003E6E49 /* WordCrusher */,
+				C7EFEEA21EF97A42008D2F78 /* WordCrusherTests */,
 				C782CC8F1EF97830003E6E49 /* Products */,
 				644CEE158F2BEE3CF9B2ACA9 /* Pods */,
 				DCEAB746EEA7112CCFF101C1 /* Frameworks */,
@@ -61,6 +83,7 @@
 			isa = PBXGroup;
 			children = (
 				C782CC8E1EF97830003E6E49 /* WordCrusher.app */,
+				C7EFEEA11EF97A42008D2F78 /* WordCrusherTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -75,6 +98,15 @@
 				C782CC9A1EF97830003E6E49 /* Info.plist */,
 			);
 			path = WordCrusher;
+			sourceTree = "<group>";
+		};
+		C7EFEEA21EF97A42008D2F78 /* WordCrusherTests */ = {
+			isa = PBXGroup;
+			children = (
+				C7EFEEA31EF97A42008D2F78 /* WordCrusherTests.swift */,
+				C7EFEEA51EF97A42008D2F78 /* Info.plist */,
+			);
+			path = WordCrusherTests;
 			sourceTree = "<group>";
 		};
 		DCEAB746EEA7112CCFF101C1 /* Frameworks */ = {
@@ -108,6 +140,24 @@
 			productReference = C782CC8E1EF97830003E6E49 /* WordCrusher.app */;
 			productType = "com.apple.product-type.application";
 		};
+		C7EFEEA01EF97A42008D2F78 /* WordCrusherTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C7EFEEAA1EF97A42008D2F78 /* Build configuration list for PBXNativeTarget "WordCrusherTests" */;
+			buildPhases = (
+				C7EFEE9D1EF97A42008D2F78 /* Sources */,
+				C7EFEE9E1EF97A42008D2F78 /* Frameworks */,
+				C7EFEE9F1EF97A42008D2F78 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C7EFEEA71EF97A42008D2F78 /* PBXTargetDependency */,
+			);
+			name = WordCrusherTests;
+			productName = WordCrusherTests;
+			productReference = C7EFEEA11EF97A42008D2F78 /* WordCrusherTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -121,6 +171,11 @@
 					C782CC8D1EF97830003E6E49 = {
 						CreatedOnToolsVersion = 8.3.2;
 						ProvisioningStyle = Automatic;
+					};
+					C7EFEEA01EF97A42008D2F78 = {
+						CreatedOnToolsVersion = 8.3.2;
+						ProvisioningStyle = Automatic;
+						TestTargetID = C782CC8D1EF97830003E6E49;
 					};
 				};
 			};
@@ -138,6 +193,7 @@
 			projectRoot = "";
 			targets = (
 				C782CC8D1EF97830003E6E49 /* WordCrusher */,
+				C7EFEEA01EF97A42008D2F78 /* WordCrusherTests */,
 			);
 		};
 /* End PBXProject section */
@@ -149,6 +205,13 @@
 			files = (
 				C782CC961EF97830003E6E49 /* Assets.xcassets in Resources */,
 				C782CC991EF97830003E6E49 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C7EFEE9F1EF97A42008D2F78 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -212,7 +275,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C7EFEE9D1EF97A42008D2F78 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C7EFEEA41EF97A42008D2F78 /* WordCrusherTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C7EFEEA71EF97A42008D2F78 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C782CC8D1EF97830003E6E49 /* WordCrusher */;
+			targetProxy = C7EFEEA61EF97A42008D2F78 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		C782CC971EF97830003E6E49 /* Main.storyboard */ = {
@@ -346,6 +425,34 @@
 			};
 			name = Release;
 		};
+		C7EFEEA81EF97A42008D2F78 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = WordCrusherTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.scrawlsoft.WordCrusherTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WordCrusher.app/Contents/MacOS/WordCrusher";
+			};
+			name = Debug;
+		};
+		C7EFEEA91EF97A42008D2F78 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = WordCrusherTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.scrawlsoft.WordCrusherTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WordCrusher.app/Contents/MacOS/WordCrusher";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -363,6 +470,15 @@
 			buildConfigurations = (
 				C782CC9E1EF97830003E6E49 /* Debug */,
 				C782CC9F1EF97830003E6E49 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C7EFEEAA1EF97A42008D2F78 /* Build configuration list for PBXNativeTarget "WordCrusherTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C7EFEEA81EF97A42008D2F78 /* Debug */,
+				C7EFEEA91EF97A42008D2F78 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 		};
