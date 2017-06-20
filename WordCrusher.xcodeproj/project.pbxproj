@@ -14,6 +14,8 @@
 		C782CC991EF97830003E6E49 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C782CC971EF97830003E6E49 /* Main.storyboard */; };
 		C7EFEEAD1EF97AD1008D2F78 /* Trie.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7EFEEAC1EF97AD1008D2F78 /* Trie.swift */; };
 		C7EFEEAF1EF97E2E008D2F78 /* TrieTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7EFEEAE1EF97E2E008D2F78 /* TrieTest.swift */; };
+		C7EFEEB11EF9D06E008D2F78 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7EFEEB01EF9D06E008D2F78 /* Board.swift */; };
+		C7EFEEB31EF9D317008D2F78 /* BoardTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7EFEEB21EF9D317008D2F78 /* BoardTest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,6 +41,8 @@
 		C7EFEEA51EF97A42008D2F78 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C7EFEEAC1EF97AD1008D2F78 /* Trie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Trie.swift; sourceTree = "<group>"; };
 		C7EFEEAE1EF97E2E008D2F78 /* TrieTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrieTest.swift; sourceTree = "<group>"; };
+		C7EFEEB01EF9D06E008D2F78 /* Board.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
+		C7EFEEB21EF9D317008D2F78 /* BoardTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardTest.swift; sourceTree = "<group>"; };
 		EF09A1FFCDFD91A842B8BD4D /* Pods-WordCrusher.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WordCrusher.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WordCrusher/Pods-WordCrusher.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -108,6 +112,7 @@
 			children = (
 				C7EFEEA51EF97A42008D2F78 /* Info.plist */,
 				C7EFEEAE1EF97E2E008D2F78 /* TrieTest.swift */,
+				C7EFEEB21EF9D317008D2F78 /* BoardTest.swift */,
 			);
 			path = WordCrusherTests;
 			sourceTree = "<group>";
@@ -116,6 +121,7 @@
 			isa = PBXGroup;
 			children = (
 				C7EFEEAC1EF97AD1008D2F78 /* Trie.swift */,
+				C7EFEEB01EF9D06E008D2F78 /* Board.swift */,
 			);
 			name = "Data Structures";
 			sourceTree = "<group>";
@@ -283,6 +289,7 @@
 			files = (
 				C7EFEEAD1EF97AD1008D2F78 /* Trie.swift in Sources */,
 				C782CC941EF97830003E6E49 /* ViewController.swift in Sources */,
+				C7EFEEB11EF9D06E008D2F78 /* Board.swift in Sources */,
 				C782CC921EF97830003E6E49 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -291,6 +298,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C7EFEEB31EF9D317008D2F78 /* BoardTest.swift in Sources */,
 				C7EFEEAF1EF97E2E008D2F78 /* TrieTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -493,6 +501,7 @@
 				C7EFEEA91EF97A42008D2F78 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
