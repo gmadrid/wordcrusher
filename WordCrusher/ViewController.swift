@@ -15,10 +15,24 @@ class ViewController: NSViewController {
     super.viewDidLoad()
 
     // Do any additional setup after loading the view.
+//    print("Loading dict")
 //    let wordsStream = StreamReader(path: "/usr/share/dict/words")
 //    let trie = Trie()
 //    while let line = wordsStream?.nextLine() {
-//      trie.insert(word: line)
+//      // No dictionary words shorter than 3.
+//      if line.characters.count > 2 {
+//        trie.insert(word: line)
+//      }
+//    }
+//    print("Done loading dict")
+//    
+//    let startBoard = "essayrtmaxnovelagilcisedchtory"
+//    let afterEssayNovel = "rtmaxagilcisedyhtory.........."
+//    let afterClimax = "rtedyagoryis...ht............."
+//    let afterTragedy = "isoryht......................."
+//    let board = try! Board(rows: 6, cols: 5, contents: afterTragedy)
+//    board.searchAll(in: trie) { word in
+//      print(word)
 //    }
     
   }

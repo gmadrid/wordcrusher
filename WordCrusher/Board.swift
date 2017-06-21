@@ -108,6 +108,11 @@ class Board {
     // - The cell has NOT been marked
     let (row, col) = index
     let thisIndex = row * numCols + col
+    
+    // If we've already used this cell, it cannot be used again.
+    if cells[thisIndex].visited {
+      return
+    }
 
     cells[thisIndex].visited = true
     defer { cells[thisIndex].visited = false }
