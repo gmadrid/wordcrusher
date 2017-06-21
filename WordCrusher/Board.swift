@@ -70,33 +70,39 @@ class Board {
     return 0..<numRows ~= row && 0..<numCols ~= col
   }
   
-  func searchAll(in trie: Trie) -> [String] {
-    var response: [String] = []
+  func searchAll(in trie: Trie, maxDepth: UInt = UInt.max, cb: (String) -> Void) {
     for row in 0..<numRows {
       for col in 0..<numCols {
         let index = (row, col)
-        search(from: index, in: trie) {
-          response.append($0)
-        }
+        search(from: index, in: trie, maxDepth: maxDepth, cb: cb)
       }
     }
+  }
+  
+  func searchAll(in trie: Trie, maxDepth: UInt = UInt.max) -> [String] {
+    var response: [String] = []
+    searchAll(in: trie, maxDepth: maxDepth) { response.append($0) }
     return response
   }
   
-  func search(from start: CellIndex, in trie: Trie, cb: (String) -> Void) {
-    searchHelper(start, trie.search(), "", cb)
+  func search(from start: CellIndex, in trie: Trie, maxDepth: UInt = UInt.max, cb: (String) -> Void) {
+    searchHelper(start, trie.search(), "", currentDepth: 0, maxDepth: maxDepth, cb: cb)
   }
   
-  func search(from start: CellIndex, in trie: Trie) -> [String] {
+  func search(from start: CellIndex, in trie: Trie, maxDepth: UInt = UInt.max) -> [String] {
     var response: [String] = []
-    search(from: start, in: trie) {
+    let _ = search(from: start, in: trie, maxDepth: maxDepth) {
       response.append($0)
     }
     return response
   }
   
-  func searchHelper(_ index: CellIndex, _ token: TrieToken, _ soFar: String,
-                    _ cb: (String) -> Void) {
+  // If cb returns true, then stop right away.
+  // Returns true if the search should stop right away.
+  // TODO: fix the BUG. This doesn't work with maxDepth = 0
+  fileprivate func searchHelper(_ index: CellIndex, _ token: TrieToken, _ soFar: String,
+                                currentDepth: UInt,
+                                maxDepth: UInt, cb: (String) -> Void) {
     // Upon entry:
     // - Token does NOT include the letter in this cell
     // - The cell has NOT been marked
@@ -108,7 +114,7 @@ class Board {
     
     let thisLetter = cells[thisIndex].letter
     guard let thisToken = token.next(thisLetter) else {
-      // This letter does not advance the search, so leave.
+      // This letter does not advance the search, so leave but continue searching.
       return
     }
     var newSoFar = soFar
@@ -116,9 +122,11 @@ class Board {
     if thisToken.isWord {
       cb(newSoFar)
     }
-    
-    for nextCell in adjacent(to: index) {
-      searchHelper(nextCell, thisToken, newSoFar, cb)
+
+    if currentDepth < maxDepth - 1 {
+      for nextCell in adjacent(to: index) {
+        searchHelper(nextCell, thisToken, newSoFar, currentDepth: currentDepth + 1, maxDepth: maxDepth, cb: cb)
+      }
     }
   }
 

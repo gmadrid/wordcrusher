@@ -15,11 +15,11 @@ class ViewController: NSViewController {
     super.viewDidLoad()
 
     // Do any additional setup after loading the view.
-    let wordsStream = StreamReader(path: "/usr/share/dict/words")
-    let trie = Trie()
-    while let line = wordsStream?.nextLine() {
-      trie.insert(word: line)
-    }
+//    let wordsStream = StreamReader(path: "/usr/share/dict/words")
+//    let trie = Trie()
+//    while let line = wordsStream?.nextLine() {
+//      trie.insert(word: line)
+//    }
     
   }
 

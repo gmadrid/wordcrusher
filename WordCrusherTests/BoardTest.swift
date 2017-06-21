@@ -30,6 +30,28 @@ class BoardTest: XCTestCase {
     return String(adjacent)
   }
   
+  func testSearchLimit() throws {
+    let trie = Trie()
+    ["hello", "hell", "bell", "belly"]
+      .forEach { trie.insert(word:$0) }
+    
+    // The 3x4 board looks like this:
+    //
+    //   X   V
+    // H   O
+    //   E   L
+    // B   L
+    //   Q   Y
+    // U   R
+    board = try Board(rows: 3, cols: 4, contents: "HXOVBELLUQRY")
+    
+    let list = board.searchAll(in: trie)
+    XCTAssertEqual([ "bell", "belly", "hell", "hello" ], list.sorted())
+    
+    let shortList: [String] = board.searchAll(in: trie, maxDepth: 4)
+    XCTAssertEqual(2, shortList.count)
+  }
+  
   func testSearch() throws {
     let trie = Trie()
     trie.insert(word: "hello")
