@@ -30,6 +30,30 @@ class BoardTest: XCTestCase {
     return String(adjacent)
   }
   
+  func testSearch() throws {
+    let trie = Trie()
+    trie.insert(word: "hello")
+    trie.insert(word: "kitty")
+    trie.insert(word: "hell")
+    
+    // The 3x4 board looks like this:
+    //    
+    //     I   T
+    //   K   T
+    //     H   H
+    //   E   S
+    //     L   Y
+    //   L   O
+    board = try Board(rows: 3, cols: 4, contents: "KITTEHSHLLOY")
+    
+    let list = board.search(from: (1, 1), in: trie)
+    XCTAssertEqual(["hell", "hell", "hello"], list.sorted())
+    let list2 = board.search(from: (1, 3), in: trie)
+    XCTAssertEqual([], list2)
+    let list3 = board.search(from: (0, 0), in: trie)
+    XCTAssertEqual([], list3)
+  }
+  
   func testBoard() throws {
     // The 3x4 board looks like this:
     //
@@ -45,17 +69,17 @@ class BoardTest: XCTestCase {
     // This little exercise tests both adjacent and lookup.
     
     // Try some even columns
-    XCTAssertEqual("AFIJ", try adjacentString(to: (1, 0)))
-    XCTAssertEqual("CFHJKL", try adjacentString(to: (1, 2)))
-    XCTAssertEqual("BEF", try adjacentString(to: (0, 0)))
-    XCTAssertEqual("EJ", try adjacentString(to: (2, 0)))
-    XCTAssertEqual("GJL", try adjacentString(to: (2, 2)))
+    XCTAssertEqual("afij", try adjacentString(to: (1, 0)))
+    XCTAssertEqual("cfhjkl", try adjacentString(to: (1, 2)))
+    XCTAssertEqual("bef", try adjacentString(to: (0, 0)))
+    XCTAssertEqual("ej", try adjacentString(to: (2, 0)))
+    XCTAssertEqual("gjl", try adjacentString(to: (2, 2)))
     
     // Try some odd columns
-    XCTAssertEqual("ACF", try adjacentString(to: (0, 1)))
-    XCTAssertEqual("CH", try adjacentString(to: (0, 3)))
-    XCTAssertEqual("ABCEGJ", try adjacentString(to: (1, 1)))
-    XCTAssertEqual("GHK", try adjacentString(to: (2, 3)))
+    XCTAssertEqual("acf", try adjacentString(to: (0, 1)))
+    XCTAssertEqual("ch", try adjacentString(to: (0, 3)))
+    XCTAssertEqual("abcegj", try adjacentString(to: (1, 1)))
+    XCTAssertEqual("ghk", try adjacentString(to: (2, 3)))
   }
   
 }

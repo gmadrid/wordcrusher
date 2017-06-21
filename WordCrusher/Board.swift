@@ -39,7 +39,7 @@ class Board {
 
   private struct Cell {
     let letter: Character
-    var mark: Bool = false
+    var visited: Bool = false
     
     init(letter: Character) {
       self.letter = letter
@@ -48,12 +48,12 @@ class Board {
   
   let numRows: Int
   let numCols: Int
-  private let cells: [Cell]
+  private var cells: [Cell]
   
   init(rows: Int, cols: Int, contents: String) throws {
     self.numRows = rows
     self.numCols = cols
-    let chars = contents.characters
+    let chars = contents.lowercased().characters
     
     guard chars.count == rows * cols else {
       throw Errs.contentsIsWrongLength
@@ -68,6 +68,45 @@ class Board {
   fileprivate func indexInBoard(index: CellIndex) -> Bool {
     let (row, col) = index
     return 0..<numRows ~= row && 0..<numCols ~= col
+  }
+  
+  func search(from start: CellIndex, in trie: Trie, cb: (String) -> Void) {
+    searchHelper(start, trie.search(), "", cb)
+  }
+  
+  func search(from start: CellIndex, in trie: Trie) -> [String] {
+    var response: [String] = []
+    search(from: start, in: trie) {
+      response.append($0)
+    }
+    return response
+  }
+  
+  func searchHelper(_ index: CellIndex, _ token: TrieToken, _ soFar: String,
+                    _ cb: (String) -> Void) {
+    // Upon entry:
+    // - Token does NOT include the letter in this cell
+    // - The cell has NOT been marked
+    let (row, col) = index
+    let thisIndex = row * numCols + col
+
+    cells[thisIndex].visited = true
+    defer { cells[thisIndex].visited = false }
+    
+    let thisLetter = cells[thisIndex].letter
+    guard let thisToken = token.next(thisLetter) else {
+      // This letter does not advance the search, so leave.
+      return
+    }
+    var newSoFar = soFar
+    newSoFar.append(thisLetter)
+    if thisToken.isWord {
+      cb(newSoFar)
+    }
+    
+    for nextCell in adjacent(to: index) {
+      searchHelper(nextCell, thisToken, newSoFar, cb)
+    }
   }
 
   func adjacent(to index: CellIndex) -> [CellIndex] {
