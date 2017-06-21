@@ -64,6 +64,7 @@ class BoardTest: XCTestCase {
     // B   L
     //   Q   Y
     // U   R
+    //
     board = try Board(rows: 3, cols: 4, contents: "HXOVBELLUQRY")
     
     let list = board.searchAll(in: trie)
@@ -84,6 +85,7 @@ class BoardTest: XCTestCase {
     //   E   S
     //     L   Y
     //   L   O
+    //
     board = try Board(rows: 3, cols: 4, contents: "KITTEHSHLLOY")
     
     // Test that it finds all versions of word and that it will find a word that continues another.
@@ -110,6 +112,7 @@ class BoardTest: XCTestCase {
     //   O   E
     //     L   X
     //   L   H
+    //
     board = try Board(rows: 3, cols: 4, contents: "KITTOHEYLLHX")
     
     let list = board.searchAll(in: trie)
