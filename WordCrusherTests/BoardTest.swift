@@ -10,6 +10,7 @@ import XCTest
 @testable import WordCrusher
 
 class BoardTest: XCTestCase {
+  var board: Board!
   
   override func setUp() {
     super.setUp()
@@ -21,16 +22,16 @@ class BoardTest: XCTestCase {
     super.tearDown()
   }
   
-  func adjacentString(board: Board, index: Board.CellIndex) throws -> String {
+  func adjacentString(to index: Board.CellIndex) throws -> String {
     let adjacent =
-      try board.adjacent(index: index)
+      try board.adjacent(to: index)
         .map { try board.lookup(index: $0) }
         .sorted()
     return String(adjacent)
   }
   
   func testBoard() throws {
-    // The board looks like this:
+    // The 3x4 board looks like this:
     //
     //    B   D
     //  A   C
@@ -38,22 +39,23 @@ class BoardTest: XCTestCase {
     //  E   G
     //    J   L
     //  I   K
-    let board = try Board(rows: 3, cols: 4, contents: "ABCDEFGHIJKL")
+    //
+    board = try Board(rows: 3, cols: 4, contents: "ABCDEFGHIJKL")
 
     // This little exercise tests both adjacent and lookup.
     
     // Try some even columns
-    XCTAssertEqual("AFIJ", try adjacentString(board: board, index: (1, 0)))
-    XCTAssertEqual("CFHJKL", try adjacentString(board: board, index: (1, 2)))
-    XCTAssertEqual("BEF", try adjacentString(board: board, index: (0, 0)))
-    XCTAssertEqual("EJ", try adjacentString(board: board, index: (2, 0)))
-    XCTAssertEqual("GJL", try adjacentString(board: board, index: (2, 2)))
+    XCTAssertEqual("AFIJ", try adjacentString(to: (1, 0)))
+    XCTAssertEqual("CFHJKL", try adjacentString(to: (1, 2)))
+    XCTAssertEqual("BEF", try adjacentString(to: (0, 0)))
+    XCTAssertEqual("EJ", try adjacentString(to: (2, 0)))
+    XCTAssertEqual("GJL", try adjacentString(to: (2, 2)))
     
     // Try some odd columns
-    XCTAssertEqual("ACF", try adjacentString(board: board, index: (0, 1)))
-    XCTAssertEqual("CH", try adjacentString(board: board, index: (0, 3)))
-    XCTAssertEqual("ABCEGJ", try adjacentString(board: board, index: (1, 1)))
-    XCTAssertEqual("GHK", try adjacentString(board: board, index: (2, 3)))
+    XCTAssertEqual("ACF", try adjacentString(to: (0, 1)))
+    XCTAssertEqual("CH", try adjacentString(to: (0, 3)))
+    XCTAssertEqual("ABCEGJ", try adjacentString(to: (1, 1)))
+    XCTAssertEqual("GHK", try adjacentString(to: (2, 3)))
   }
   
 }

@@ -10,6 +10,7 @@ import Foundation
 
 enum Errs : Error {
   case contentsIsWrongLength
+  case fileNotFound(String)
   case indexOutOfRange
 }
 
@@ -69,7 +70,7 @@ class Board {
     return 0..<numRows ~= row && 0..<numCols ~= col
   }
 
-  func adjacent(index: CellIndex) -> [CellIndex] {
+  func adjacent(to index: CellIndex) -> [CellIndex] {
     let (row, col) = index
     let offsets: [CellIndex]
     if col % 2 == 0 {

@@ -8,5 +8,6 @@ target 'WordCrusher' do
   # Pods for pdfsplitter
   pod 'RxSwift', '~> 3.4'
   pod 'RxCocoa', '~> 3.4'
+  pod 'StreamReader'
   
 end

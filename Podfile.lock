@@ -2,15 +2,18 @@ PODS:
   - RxCocoa (3.5.0):
     - RxSwift (~> 3.4)
   - RxSwift (3.5.0)
+  - StreamReader (0.2.0)
 
 DEPENDENCIES:
   - RxCocoa (~> 3.4)
   - RxSwift (~> 3.4)
+  - StreamReader
 
 SPEC CHECKSUMS:
   RxCocoa: a0a09f45d0e5b48ecb6a4a7b4b4c89c88d3f633f
   RxSwift: 18ee9d78b45edb3b0b7e79916b47a116e6dbc842
+  StreamReader: 43dd528c79bcf1dfcb886179300a2939bfc95d98
 
-PODFILE CHECKSUM: 67f7e0293a9be899a01d5a79e23ce79f9a372ab8
+PODFILE CHECKSUM: 98598080f4052ebb448de34da426cadb2fd2dc74
 
 COCOAPODS: 1.2.1
