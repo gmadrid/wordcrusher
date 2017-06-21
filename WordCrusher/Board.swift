@@ -70,6 +70,19 @@ class Board {
     return 0..<numRows ~= row && 0..<numCols ~= col
   }
   
+  func searchAll(in trie: Trie) -> [String] {
+    var response: [String] = []
+    for row in 0..<numRows {
+      for col in 0..<numCols {
+        let index = (row, col)
+        search(from: index, in: trie) {
+          response.append($0)
+        }
+      }
+    }
+    return response
+  }
+  
   func search(from start: CellIndex, in trie: Trie, cb: (String) -> Void) {
     searchHelper(start, trie.search(), "", cb)
   }

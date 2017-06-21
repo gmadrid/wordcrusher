@@ -54,6 +54,27 @@ class BoardTest: XCTestCase {
     XCTAssertEqual([], list3)
   }
   
+  func testSearchAll() throws {
+    let trie = Trie()
+    trie.insert(word: "hello")
+    trie.insert(word: "kitty")
+    trie.insert(word: "hell")
+
+    // The 3x4 board looks like this:
+    //
+    //     I   T
+    //   K   T
+    //     H   Y
+    //   O   E
+    //     L   X
+    //   L   H
+    board = try Board(rows: 3, cols: 4, contents: "KITTOHEYLLHX")
+    
+    let list = board.searchAll(in: trie)
+    XCTAssertEqual(["hell", "hell", "hello", "hello", "kitty"], list.sorted())
+
+  }
+  
   func testBoard() throws {
     // The 3x4 board looks like this:
     //
