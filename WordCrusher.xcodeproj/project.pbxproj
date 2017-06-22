@@ -8,10 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		6F1E0EEA1E9F2B1215A39FCF /* Pods_WordCrusher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30F6AF43F9EEBD1A886F7ABE /* Pods_WordCrusher.framework */; };
+		B98387D1A9BEA563911B3A69 /* Pods_WordCrusherTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5166DBC4E3262AA92E07A7BE /* Pods_WordCrusherTests.framework */; };
 		C782CC921EF97830003E6E49 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C782CC911EF97830003E6E49 /* AppDelegate.swift */; };
 		C782CC941EF97830003E6E49 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C782CC931EF97830003E6E49 /* ViewController.swift */; };
 		C782CC961EF97830003E6E49 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C782CC951EF97830003E6E49 /* Assets.xcassets */; };
 		C782CC991EF97830003E6E49 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C782CC971EF97830003E6E49 /* Main.storyboard */; };
+		C79B511C1EFC159C00BFA96B /* BoardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79B511B1EFC159C00BFA96B /* BoardViewModel.swift */; };
 		C7B3EA391EFB69A3000B1BDE /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B3EA381EFB69A3000B1BDE /* BoardView.swift */; };
 		C7EFEEAD1EF97AD1008D2F78 /* Trie.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7EFEEAC1EF97AD1008D2F78 /* Trie.swift */; };
 		C7EFEEAF1EF97E2E008D2F78 /* TrieTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7EFEEAE1EF97E2E008D2F78 /* TrieTest.swift */; };
@@ -32,12 +34,15 @@
 /* Begin PBXFileReference section */
 		12FF4C32E586CA0F1E13CD96 /* Pods-WordCrusher.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WordCrusher.release.xcconfig"; path = "Pods/Target Support Files/Pods-WordCrusher/Pods-WordCrusher.release.xcconfig"; sourceTree = "<group>"; };
 		30F6AF43F9EEBD1A886F7ABE /* Pods_WordCrusher.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WordCrusher.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5166DBC4E3262AA92E07A7BE /* Pods_WordCrusherTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WordCrusherTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		757DC797BBEE95D1115569DA /* Pods-WordCrusherTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WordCrusherTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WordCrusherTests/Pods-WordCrusherTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C782CC8E1EF97830003E6E49 /* WordCrusher.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WordCrusher.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C782CC911EF97830003E6E49 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C782CC931EF97830003E6E49 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		C782CC951EF97830003E6E49 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C782CC981EF97830003E6E49 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C782CC9A1EF97830003E6E49 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C79B511B1EFC159C00BFA96B /* BoardViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardViewModel.swift; sourceTree = "<group>"; };
 		C7B3EA381EFB69A3000B1BDE /* BoardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
 		C7EFEEA11EF97A42008D2F78 /* WordCrusherTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WordCrusherTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7EFEEA51EF97A42008D2F78 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -45,6 +50,7 @@
 		C7EFEEAE1EF97E2E008D2F78 /* TrieTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrieTest.swift; sourceTree = "<group>"; };
 		C7EFEEB01EF9D06E008D2F78 /* Board.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
 		C7EFEEB21EF9D317008D2F78 /* BoardTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardTest.swift; sourceTree = "<group>"; };
+		CB4BFDD29BFCED4E0E0A7698 /* Pods-WordCrusherTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WordCrusherTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-WordCrusherTests/Pods-WordCrusherTests.release.xcconfig"; sourceTree = "<group>"; };
 		EF09A1FFCDFD91A842B8BD4D /* Pods-WordCrusher.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WordCrusher.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WordCrusher/Pods-WordCrusher.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -61,6 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B98387D1A9BEA563911B3A69 /* Pods_WordCrusherTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -72,6 +79,8 @@
 			children = (
 				EF09A1FFCDFD91A842B8BD4D /* Pods-WordCrusher.debug.xcconfig */,
 				12FF4C32E586CA0F1E13CD96 /* Pods-WordCrusher.release.xcconfig */,
+				757DC797BBEE95D1115569DA /* Pods-WordCrusherTests.debug.xcconfig */,
+				CB4BFDD29BFCED4E0E0A7698 /* Pods-WordCrusherTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -99,6 +108,7 @@
 		C782CC901EF97830003E6E49 /* WordCrusher */ = {
 			isa = PBXGroup;
 			children = (
+				C79B511A1EFC158A00BFA96B /* ViewModels */,
 				C7B3EA351EFB6925000B1BDE /* Views */,
 				C7EFEEAB1EF97AB7008D2F78 /* Data Structures */,
 				C782CC911EF97830003E6E49 /* AppDelegate.swift */,
@@ -108,6 +118,14 @@
 				C782CC9A1EF97830003E6E49 /* Info.plist */,
 			);
 			path = WordCrusher;
+			sourceTree = "<group>";
+		};
+		C79B511A1EFC158A00BFA96B /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				C79B511B1EFC159C00BFA96B /* BoardViewModel.swift */,
+			);
+			name = ViewModels;
 			sourceTree = "<group>";
 		};
 		C7B3EA351EFB6925000B1BDE /* Views */ = {
@@ -141,6 +159,7 @@
 			isa = PBXGroup;
 			children = (
 				30F6AF43F9EEBD1A886F7ABE /* Pods_WordCrusher.framework */,
+				5166DBC4E3262AA92E07A7BE /* Pods_WordCrusherTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -172,9 +191,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C7EFEEAA1EF97A42008D2F78 /* Build configuration list for PBXNativeTarget "WordCrusherTests" */;
 			buildPhases = (
+				9FD0BBA68F862E7C798E920D /* [CP] Check Pods Manifest.lock */,
 				C7EFEE9D1EF97A42008D2F78 /* Sources */,
 				C7EFEE9E1EF97A42008D2F78 /* Frameworks */,
 				C7EFEE9F1EF97A42008D2F78 /* Resources */,
+				A8B60AA11E18AD3AFEBC2FF7 /* [CP] Embed Pods Frameworks */,
+				37FE81B0922CA68DD96279D6 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -246,6 +268,51 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		37FE81B0922CA68DD96279D6 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-WordCrusherTests/Pods-WordCrusherTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9FD0BBA68F862E7C798E920D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		A8B60AA11E18AD3AFEBC2FF7 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-WordCrusherTests/Pods-WordCrusherTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		B07FFF4898FE6C3AD0AC78D8 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -303,6 +370,7 @@
 				C7B3EA391EFB69A3000B1BDE /* BoardView.swift in Sources */,
 				C7EFEEB11EF9D06E008D2F78 /* Board.swift in Sources */,
 				C782CC921EF97830003E6E49 /* AppDelegate.swift in Sources */,
+				C79B511C1EFC159C00BFA96B /* BoardViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -459,6 +527,7 @@
 		};
 		C7EFEEA81EF97A42008D2F78 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 757DC797BBEE95D1115569DA /* Pods-WordCrusherTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COMBINE_HIDPI_IMAGES = YES;
@@ -473,6 +542,7 @@
 		};
 		C7EFEEA91EF97A42008D2F78 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CB4BFDD29BFCED4E0E0A7698 /* Pods-WordCrusherTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COMBINE_HIDPI_IMAGES = YES;

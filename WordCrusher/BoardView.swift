@@ -7,6 +7,8 @@
 //
 
 import Cocoa
+import RxCocoa
+import RxSwift
 
 fileprivate let pi: CGFloat = 3.14159265359
 fileprivate let rad3 = sqrt(3.0) as CGFloat
@@ -20,8 +22,10 @@ fileprivate let corners =
 }
 
 class BoardView: NSView {
-  let rows: UInt
-  let cols: UInt
+  let disposeBag = DisposeBag()
+
+  // (row, col)
+  var dimensions: Variable<(Int, Int)> = Variable((0, 0) as (Int, Int))
   
   // The radius of all of the hexes in the grid
   // (The radius of a hex is the distance from the center to a vertex.
@@ -32,22 +36,54 @@ class BoardView: NSView {
   var inset: EdgeInsets = NSEdgeInsetsMake(5.0, 5.0, 5.0, 5.0) {
     didSet {
       setNeedsDisplay(self.bounds)
-      needsLayout = true
     }
   }
   
-  init(frame frameRect: NSRect, rows: UInt, cols: UInt, sideLength: CGFloat) {
-    self.rows = rows
-    self.cols = cols
-    self.radius = sideLength
+  init(frame frameRect: NSRect, viewModel: BoardViewModel) {
+    self.radius = 20.0
     
     super.init(frame: frameRect)
+    
+    // If the board changes, load the new dimensions.
+    viewModel.board_
+      .map { board -> (Int, Int) in return (board.numRows, board.numCols) }
+      .asDriver(onErrorJustReturn: (0,0))
+      .drive(dimensions)
+      .disposed(by: disposeBag)
+    
+    // If the dimensions change, redraw.
+    dimensions
+      .asObservable()
+      .asDriver(onErrorJustReturn: (0, 0))
+      .drive(onNext: { [weak self] (numRows, numCols) in
+        guard let view = self else { return }
+        view.setNeedsDisplay(view.bounds)
+      })
+      .disposed(by: disposeBag)
+    
+    // If the activeCell changes, redraw.
+    viewModel.activeCell_
+      .asDriver(onErrorJustReturn: Board.CellIndex.zero)
+      .drive(onNext: { [weak self] _ in
+        guard let view = self else { return }
+        Swift.print("active cell changed")
+        view.setNeedsDisplay(view.bounds)
+      })
+      .disposed(by: disposeBag)
+    
+    viewModel.changedCell_
+      .startWith(Board.CellIndex.zero)
+      .asDriver(onErrorJustReturn: Board.CellIndex.zero)
+      .drive(onNext: { [weak self] _ in
+        guard let view = self else { return }
+        view.setNeedsDisplay(view.bounds)        
+      })
+      .disposed(by: disposeBag)
   }
   
   required init?(coder: NSCoder) {
-    self.rows = 5
-    self.cols = 5
-    self.radius = 5.0
+    self.dimensions.value = (5, 5)
+    self.radius = 20.0
     super.init(coder: coder)
   }
   
@@ -67,14 +103,14 @@ class BoardView: NSView {
     return path
   }
   
-  private func centersForRow(at start: CGPoint, cols count: UInt) -> [CGPoint] {
+  private func centersForRow(at start: CGPoint, cols count: Int) -> [CGPoint] {
     return (0..<count).map({ i -> CGPoint in
       CGPoint(x: start.x + CGFloat(i) * 1.5 * radius,
               y: start.y + CGFloat(i % 2) * -rad3Over2 * radius)
     })
   }
   
-  private func copyRowCenters(_ centers: [CGPoint], count: UInt) -> [CGPoint] {
+  private func copyRowCenters(_ centers: [CGPoint], count: Int) -> [CGPoint] {
     return Array((0..<count).map { row -> [CGPoint] in
       (0..<centers.count).map { col -> CGPoint in
         CGPoint(x: centers[col].x,
@@ -85,6 +121,7 @@ class BoardView: NSView {
   }
   
   override func draw(_ dirtyRect: NSRect) {
+    Swift.print("DRAWING")
     super.draw(dirtyRect)
     
     guard let context = NSGraphicsContext.current()?.cgContext else {
@@ -96,8 +133,8 @@ class BoardView: NSView {
     context.translateBy(x: 0, y: -self.bounds.size.height)
     
     let firstHexCenter = CGPoint(x: inset.left + radius, y: inset.top + rad3 * radius)
-    let firstRowCenters = centersForRow(at: firstHexCenter, cols: cols)
-    let allCenters = copyRowCenters(firstRowCenters, count: rows)
+    let firstRowCenters = centersForRow(at: firstHexCenter, cols: dimensions.value.1)
+    let allCenters = copyRowCenters(firstRowCenters, count: dimensions.value.0)
     let hexPaths = allCenters.map { pathForPoly(points: hexPoints(at: $0, radius: radius)) }
 
     hexPaths.forEach { path in

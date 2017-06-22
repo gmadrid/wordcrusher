@@ -35,7 +35,22 @@ enum Errs: Error {
    For example, the neighbors of (1, 2) are (0, 2), (2, 2), (1, 1), (1, 3), (2, 1), (2, 3).
  */
 class Board {
-  typealias CellIndex = (Int, Int)
+  class CellIndex : Equatable, Hashable {
+    public var hashValue: Int { return row.hashValue ^ col.hashValue }
+
+    static let zero = CellIndex(row: 0, col: 0)
+    
+    let row: Int
+    let col: Int
+    init(row: Int, col: Int) {
+      self.row = row
+      self.col = col
+    }
+    
+    public static func ==(lhs: CellIndex, rhs: CellIndex) -> Bool {
+      return lhs.row == rhs.row && lhs.col == rhs.col
+    }
+  }
 
   private struct Cell {
     let letter: Character
@@ -50,12 +65,18 @@ class Board {
   let numCols: Int
   private var cells: [Cell]
 
-  init(rows: Int, cols: Int, contents: String) throws {
+  init(rows: Int, cols: Int, contents: String? = nil) throws {
     numRows = rows
     numCols = cols
+    
+    guard let contents = contents else {
+      cells = String(repeating: ".", count: Int(rows * cols)).characters.map{ Cell(letter: $0) }
+      return
+    }
+    
     let chars = contents.lowercased().characters
 
-    guard chars.count == rows * cols else {
+    guard chars.count == Int(rows * cols) else {
       throw Errs.contentsIsWrongLength
     }
     var chs = Array<Cell>()
@@ -65,15 +86,14 @@ class Board {
     cells = chs
   }
 
-  fileprivate func indexInBoard(index: CellIndex) -> Bool {
-    let (row, col) = index
-    return 0 ..< numRows ~= row && 0 ..< numCols ~= col
+  fileprivate func isIndexInBoard(index: CellIndex) -> Bool {
+    return 0 ..< numRows ~= index.row && 0 ..< numCols ~= index.col
   }
 
   func searchAll(in trie: Trie, maxDepth: UInt = UInt.max, cb: (String) -> Void) {
     for row in 0 ..< numRows {
       for col in 0 ..< numCols {
-        let index = (row, col)
+        let index = Board.CellIndex(row: row, col: col)
         search(from: index, in: trie, maxDepth: maxDepth, cb: cb)
       }
     }
@@ -106,8 +126,7 @@ class Board {
     // Upon entry:
     // - Token does NOT include the letter in this cell
     // - The cell has NOT been marked
-    let (row, col) = index
-    let thisIndex = row * numCols + col
+    let thisIndex = index.row * numCols + index.col
 
     // If we've already used this cell, it cannot be used again.
     if cells[thisIndex].visited {
@@ -136,24 +155,27 @@ class Board {
   }
 
   func adjacent(to index: CellIndex) -> [CellIndex] {
-    let (row, col) = index
     let offsets: [CellIndex]
-    if col % 2 == 0 {
-      offsets = [(-1, 0), (1, 0), (0, 1), (1, 1), (0, -1), (1, -1)]
+    if index.col % 2 == 0 {
+      offsets = [(-1, 0), (1, 0), (0, 1), (1, 1), (0, -1), (1, -1)].map { (row, col) in
+        return Board.CellIndex(row: row, col: col)
+      }
     } else {
-      offsets = [(1, 0), (-1, 0), (-1, 1), (0, 1), (0, -1), (-1, -1)]
+      offsets = [(1, 0), (-1, 0), (-1, 1), (0, 1), (0, -1), (-1, -1)].map { (row, col) in
+        return Board.CellIndex(row: row, col: col)
+      }
     }
 
-    return offsets.map { offsetrow, offsetcol in
-      (row + offsetrow, col + offsetcol)
-    }
-    .filter { self.indexInBoard(index: $0)
+    return offsets.map { offsetindex in
+      Board.CellIndex(row: index.row + offsetindex.row, col: index.col + offsetindex.col)
+      }
+      .filter { index in
+        self.isIndexInBoard(index: index)
     }
   }
 
   func lookup(index: CellIndex) throws -> Character {
-    let (row, col) = index
-    let arrayIndex = row * numCols + col
+    let arrayIndex = index.row * numCols + index.col
     guard 0 ..< cells.count ~= arrayIndex else {
       throw Errs.indexOutOfRange
     }

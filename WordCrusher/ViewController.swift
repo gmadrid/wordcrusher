@@ -12,16 +12,22 @@ import RxSwift
 import StreamReader
 
 class ViewController: NSViewController {
+  var boardViewModel: BoardViewModel!
+  
+  let disposeBag = DisposeBag()
 
   override func viewDidLoad() {
     super.viewDidLoad()
-
-    // Do any additional setup after loading the view.
     
-    let boardView = BoardView(frame: view.bounds, rows: 3, cols: 7, sideLength: 15.0)
+    let board = try! Board(rows: 4, cols: 5)
+    boardViewModel = BoardViewModel(board: board)
+    let boardView = BoardView(frame: view.bounds, viewModel: boardViewModel)
     boardView.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
     view.addSubview(boardView)
     
+    let button = NSButton(title: "A button", target: self, action: #selector(buttonTapped(_:)))
+    view.addSubview(button)
+
     _ = Observable.just("/usr/share/dict/words")
       .map { path -> Trie in
         let trie = Trie()
@@ -38,8 +44,7 @@ class ViewController: NSViewController {
       .shareReplay(1)
       .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
       .asDriver(onErrorJustReturn: Trie())
-      .drive(onNext: { trie in print(trie) },
-             onCompleted: { print ("COMPLETE") })
+      .drive(onNext: { trie in })
 
     //    print("Loading dict")
     //    let wordsStream = StreamReader(path: "/usr/share/dict/words")
@@ -60,6 +65,11 @@ class ViewController: NSViewController {
     //    board.searchAll(in: trie) { word in
     //      print(word)
     //    }
+    
+  }
+  
+  func buttonTapped(_ sender: Any?) {
+    boardViewModel.setActiveCell(index: Board.CellIndex(row: 5, col: 5))
   }
 
   override var representedObject: Any? {

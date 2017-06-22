@@ -10,4 +10,8 @@ target 'WordCrusher' do
   pod 'RxCocoa', '~> 3.4'
   pod 'StreamReader'
   
+  target 'WordCrusherTests' do
+    inherit! :search_paths
+  end
+  
 end
