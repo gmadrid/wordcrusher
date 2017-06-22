@@ -12,6 +12,7 @@
 		C782CC941EF97830003E6E49 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C782CC931EF97830003E6E49 /* ViewController.swift */; };
 		C782CC961EF97830003E6E49 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C782CC951EF97830003E6E49 /* Assets.xcassets */; };
 		C782CC991EF97830003E6E49 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C782CC971EF97830003E6E49 /* Main.storyboard */; };
+		C7B3EA391EFB69A3000B1BDE /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B3EA381EFB69A3000B1BDE /* BoardView.swift */; };
 		C7EFEEAD1EF97AD1008D2F78 /* Trie.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7EFEEAC1EF97AD1008D2F78 /* Trie.swift */; };
 		C7EFEEAF1EF97E2E008D2F78 /* TrieTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7EFEEAE1EF97E2E008D2F78 /* TrieTest.swift */; };
 		C7EFEEB11EF9D06E008D2F78 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7EFEEB01EF9D06E008D2F78 /* Board.swift */; };
@@ -37,6 +38,7 @@
 		C782CC951EF97830003E6E49 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C782CC981EF97830003E6E49 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C782CC9A1EF97830003E6E49 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C7B3EA381EFB69A3000B1BDE /* BoardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
 		C7EFEEA11EF97A42008D2F78 /* WordCrusherTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WordCrusherTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7EFEEA51EF97A42008D2F78 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C7EFEEAC1EF97AD1008D2F78 /* Trie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Trie.swift; sourceTree = "<group>"; };
@@ -97,6 +99,7 @@
 		C782CC901EF97830003E6E49 /* WordCrusher */ = {
 			isa = PBXGroup;
 			children = (
+				C7B3EA351EFB6925000B1BDE /* Views */,
 				C7EFEEAB1EF97AB7008D2F78 /* Data Structures */,
 				C782CC911EF97830003E6E49 /* AppDelegate.swift */,
 				C782CC931EF97830003E6E49 /* ViewController.swift */,
@@ -105,6 +108,14 @@
 				C782CC9A1EF97830003E6E49 /* Info.plist */,
 			);
 			path = WordCrusher;
+			sourceTree = "<group>";
+		};
+		C7B3EA351EFB6925000B1BDE /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C7B3EA381EFB69A3000B1BDE /* BoardView.swift */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 		C7EFEEA21EF97A42008D2F78 /* WordCrusherTests */ = {
@@ -289,6 +300,7 @@
 			files = (
 				C7EFEEAD1EF97AD1008D2F78 /* Trie.swift in Sources */,
 				C782CC941EF97830003E6E49 /* ViewController.swift in Sources */,
+				C7B3EA391EFB69A3000B1BDE /* BoardView.swift in Sources */,
 				C7EFEEB11EF9D06E008D2F78 /* Board.swift in Sources */,
 				C782CC921EF97830003E6E49 /* AppDelegate.swift in Sources */,
 			);

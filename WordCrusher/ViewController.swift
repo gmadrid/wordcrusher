@@ -21,6 +21,9 @@ class ViewController: NSViewController {
 //      trie.insert(word: line)
 //    }
     
+    let boardView = BoardView(frame: view.bounds)
+    boardView.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
+    view.addSubview(boardView)
   }
 
   override var representedObject: Any? {
