@@ -18,22 +18,22 @@ import Foundation
 
 fileprivate class TrieNode {
   let letter: Character
-  lazy var children: [Character:TrieNode] = [Character:TrieNode]()
+  lazy var children: [Character: TrieNode] = [Character: TrieNode]()
   var isWord: Bool = false
-  
+
   init(letter: Character) {
     self.letter = letter
   }
-  
+
   func getChildNode(letter: Character) -> TrieNode? {
     return children[letter]
   }
-  
+
   func getOrCreateChildNode(letter: Character) -> TrieNode {
     if let node = getChildNode(letter: letter) {
       return node
     }
-    
+
     let newNode = TrieNode(letter: letter)
     children[letter] = newNode
     return newNode
@@ -46,11 +46,11 @@ class TrieToken {
   var isWord: Bool {
     return node.isWord
   }
-  
+
   fileprivate init(node: TrieNode) {
     self.node = node
   }
-  
+
   func next(_ letter: Character) -> TrieToken? {
     guard let nextNode = node.children[letter] else {
       return nil
@@ -64,24 +64,24 @@ class Trie {
 
   func insert(word: String) {
     let node = word.characters.reduce(root) { (currentNode, ch) -> TrieNode in
-      return currentNode.getOrCreateChildNode(letter:ch)
+      return currentNode.getOrCreateChildNode(letter: ch)
     }
     node.isWord = true
   }
-  
+
   func contains(word: String) -> Bool {
     var currentNode: TrieNode? = root
     for ch in word.characters {
       switch currentNode?.getChildNode(letter: ch) {
       case .none:
         return false
-      case .some(let node):
+      case let .some(node):
         currentNode = node
       }
     }
     return currentNode?.isWord ?? false
   }
-  
+
   func search() -> TrieToken {
     return TrieToken(node: root)
   }
