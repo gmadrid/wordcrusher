@@ -13,20 +13,26 @@ fileprivate let rad3 = sqrt(3.0) as CGFloat
 fileprivate let rad3Over2 = sqrt(3.0) / 2.0 as CGFloat
 fileprivate let piOver3 = pi / 3.0
 
+// The vertices of a hexagon centered at the origin with unit side-length.
+fileprivate let corners =
+  [ 0, piOver3, 2 * piOver3, 3 * piOver3, 4 * piOver3, 5 * piOver3 ].map { rad in
+    return ( CGPoint(x: cos(rad), y: sin(rad)) )
+}
+
 fileprivate let inset = NSEdgeInsetsMake(5.0, 5.0, 5.0, 5.0)
 
 class BoardView: NSView {
   let rows = 10
   let cols = 9
+
+  // The radius of all of the hexes in the grid
+  // (The radius of a hex is the distance from the center to a vertex. It is also the radius of a
+  // circle through all of the vertices.)
   let radius = 25.0 as CGFloat
   
-  private static var corners =
-    [ 0, piOver3, 2 * piOver3, 3 * piOver3, 4 * piOver3, 5 * piOver3 ].map { rad in
-      return ( CGPoint(x: cos(rad), y: sin(rad)) )
-    }
-  
+  // Returns coordinates of the six corners of a hexagon with the supplied center and radius.
   private func hexPoints(at center: CGPoint, radius: CGFloat) -> [CGPoint] {
-    return BoardView.corners.map { pt in
+    return corners.map { pt in
       return CGPoint(x: radius * pt.x + center.x, y: radius * pt.y + center.y)
     }
   }
@@ -78,5 +84,4 @@ class BoardView: NSView {
       context.strokePath()
     }
   }
-  
 }
