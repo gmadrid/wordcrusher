@@ -7,6 +7,8 @@
 //
 
 import Cocoa
+import RxCocoa
+import RxSwift
 import StreamReader
 
 class ViewController: NSViewController {
@@ -16,9 +18,27 @@ class ViewController: NSViewController {
 
     // Do any additional setup after loading the view.
     
-    let boardView = BoardView(frame: view.bounds)
+    let boardView = BoardView(frame: view.bounds, rows: 3, cols: 7, sideLength: 15.0)
     boardView.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
     view.addSubview(boardView)
+    
+    _ = Observable.just("/usr/share/dict/words")
+      .map { path -> Trie in
+        let trie = Trie()
+        let wordStream = StreamReader(path: path)
+        // TODO error
+        while let line = wordStream?.nextLine() {
+          // No dictionary words shorter than 3.
+          if line.characters.count > 2 {
+            trie.insert(word: line)
+          }
+        }
+        return trie
+      }
+      .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+      .asDriver(onErrorJustReturn: Trie())
+      .drive(onNext: { trie in print(trie) },
+             onCompleted: { print ("COMPLETE") })
 
     //    print("Loading dict")
     //    let wordsStream = StreamReader(path: "/usr/share/dict/words")

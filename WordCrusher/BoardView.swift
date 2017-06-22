@@ -19,16 +19,37 @@ fileprivate let corners =
     return ( CGPoint(x: cos(rad), y: sin(rad)) )
 }
 
-fileprivate let inset = NSEdgeInsetsMake(5.0, 5.0, 5.0, 5.0)
-
 class BoardView: NSView {
-  let rows = 10
-  let cols = 9
-
+  let rows: UInt
+  let cols: UInt
+  
   // The radius of all of the hexes in the grid
-  // (The radius of a hex is the distance from the center to a vertex. It is also the radius of a
-  // circle through all of the vertices.)
-  let radius = 25.0 as CGFloat
+  // (The radius of a hex is the distance from the center to a vertex.
+  //  It is also the radius of a circle through all of the vertices.
+  //  It is also the side length of the hexagon.)
+  let radius: CGFloat
+  
+  var inset: EdgeInsets = NSEdgeInsetsMake(5.0, 5.0, 5.0, 5.0) {
+    didSet {
+      setNeedsDisplay(self.bounds)
+      needsLayout = true
+    }
+  }
+  
+  init(frame frameRect: NSRect, rows: UInt, cols: UInt, sideLength: CGFloat) {
+    self.rows = rows
+    self.cols = cols
+    self.radius = sideLength
+    
+    super.init(frame: frameRect)
+  }
+  
+  required init?(coder: NSCoder) {
+    self.rows = 5
+    self.cols = 5
+    self.radius = 5.0
+    super.init(coder: coder)
+  }
   
   // Returns coordinates of the six corners of a hexagon with the supplied center and radius.
   private func hexPoints(at center: CGPoint, radius: CGFloat) -> [CGPoint] {
@@ -46,14 +67,14 @@ class BoardView: NSView {
     return path
   }
   
-  private func centersForRow(at start: CGPoint, cols count: Int) -> [CGPoint] {
+  private func centersForRow(at start: CGPoint, cols count: UInt) -> [CGPoint] {
     return (0..<count).map({ i -> CGPoint in
       CGPoint(x: start.x + CGFloat(i) * 1.5 * radius,
               y: start.y + CGFloat(i % 2) * -rad3Over2 * radius)
     })
   }
   
-  private func copyRowCenters(_ centers: [CGPoint], count: Int) -> [CGPoint] {
+  private func copyRowCenters(_ centers: [CGPoint], count: UInt) -> [CGPoint] {
     return Array((0..<count).map { row -> [CGPoint] in
       (0..<centers.count).map { col -> CGPoint in
         CGPoint(x: centers[col].x,
