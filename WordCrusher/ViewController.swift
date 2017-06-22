@@ -35,6 +35,7 @@ class ViewController: NSViewController {
         }
         return trie
       }
+      .shareReplay(1)
       .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
       .asDriver(onErrorJustReturn: Trie())
       .drive(onNext: { trie in print(trie) },
