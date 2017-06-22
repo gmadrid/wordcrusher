@@ -16,8 +16,8 @@ fileprivate let piOver3 = pi / 3.0
 fileprivate let inset = NSEdgeInsetsMake(5.0, 5.0, 5.0, 5.0)
 
 class BoardView: NSView {
-  let rows = 6
-  let cols = 7
+  let rows = 10
+  let cols = 9
   let radius = 25.0 as CGFloat
   
   private static var corners =
@@ -41,25 +41,20 @@ class BoardView: NSView {
   }
   
   private func centersForRow(at start: CGPoint, cols count: Int) -> [CGPoint] {
-    var centers: [CGPoint] = []
-    for i in 0..<count {
-      centers.append(CGPoint(x: start.x + CGFloat(i) * 1.5 * radius,
-                             y: start.y + CGFloat(i % 2) * -rad3Over2 * radius))
-    }
-    return centers
+    return (0..<count).map({ i -> CGPoint in
+      CGPoint(x: start.x + CGFloat(i) * 1.5 * radius,
+              y: start.y + CGFloat(i % 2) * -rad3Over2 * radius)
+    })
   }
   
   private func copyRowCenters(_ centers: [CGPoint], count: Int) -> [CGPoint] {
-    var allCenters: [CGPoint] = []
-    allCenters.append(contentsOf: centers)
-    for row in 1..<count {
-      for col in 0..<centers.count {
-        let pt = CGPoint(x: centers[col].x,
-                         y: centers[col].y + CGFloat(row * 2) * rad3Over2 * radius)
-        allCenters.append(pt)
+    return Array((0..<count).map { row -> [CGPoint] in
+      (0..<centers.count).map { col -> CGPoint in
+        CGPoint(x: centers[col].x,
+                y: centers[col].y + CGFloat(row * 2) * rad3Over2 * radius)
       }
-    }
-    return allCenters
+      }
+      .joined())
   }
   
   override func draw(_ dirtyRect: NSRect) {
