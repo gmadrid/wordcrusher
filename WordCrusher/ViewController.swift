@@ -15,7 +15,7 @@ class ViewController: NSViewController {
     super.viewDidLoad()
 
     // Do any additional setup after loading the view.
-
+    
     let boardView = BoardView(frame: view.bounds)
     boardView.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
     view.addSubview(boardView)
