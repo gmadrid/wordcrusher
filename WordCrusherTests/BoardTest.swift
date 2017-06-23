@@ -22,7 +22,7 @@ class BoardTest: XCTestCase {
     super.tearDown()
   }
 
-  private func adjacentString(to index: Board.CellIndex) throws -> String {
+  private func adjacentString(to index: CellIndex) throws -> String {
     let adjacent =
       try board.adjacent(to: index)
       .map { try board.lookup(index: $0) }
@@ -92,15 +92,15 @@ class BoardTest: XCTestCase {
     XCTAssertEqual(12, board.numCells)
 
     // Test that it finds all versions of word and that it will find a word that continues another.
-    let list = board.search(from: Board.CellIndex(row: 1, col: 1), in: trie)
+    let list = board.search(from: CellIndex(row: 1, col: 1), in: trie)
     XCTAssertEqual(["hell", "hell", "hello"], list.sorted())
 
     // Test that it will stop when nothing matches.
-    let list2 = board.search(from: Board.CellIndex(row: 1, col: 3), in: trie)
+    let list2 = board.search(from: CellIndex(row: 1, col: 3), in: trie)
     XCTAssertEqual([], list2)
 
     // Test that it will stop when a word almost matches.
-    let list3 = board.search(from: Board.CellIndex(row: 0, col: 0), in: trie)
+    let list3 = board.search(from: CellIndex(row: 0, col: 0), in: trie)
     XCTAssertEqual([], list3)
   }
 
@@ -140,17 +140,17 @@ class BoardTest: XCTestCase {
     
     // This little exercise tests both adjacent and lookup.
     // Try some even columns
-    XCTAssertEqual("afij", try adjacentString(to: Board.CellIndex(row: 1, col: 0)))
-    XCTAssertEqual("cfhjkl", try adjacentString(to: Board.CellIndex(row: 1, col: 2)))
-    XCTAssertEqual("bef", try adjacentString(to: Board.CellIndex(row: 0, col: 0)))
-    XCTAssertEqual("ej", try adjacentString(to: Board.CellIndex(row: 2, col: 0)))
-    XCTAssertEqual("gjl", try adjacentString(to: Board.CellIndex(row: 2, col: 2)))
+    XCTAssertEqual("afij", try adjacentString(to: CellIndex(row: 1, col: 0)))
+    XCTAssertEqual("cfhjkl", try adjacentString(to: CellIndex(row: 1, col: 2)))
+    XCTAssertEqual("bef", try adjacentString(to: CellIndex(row: 0, col: 0)))
+    XCTAssertEqual("ej", try adjacentString(to: CellIndex(row: 2, col: 0)))
+    XCTAssertEqual("gjl", try adjacentString(to: CellIndex(row: 2, col: 2)))
 
     // Try some odd columns
-    XCTAssertEqual("acf", try adjacentString(to: Board.CellIndex(row: 0, col: 1)))
-    XCTAssertEqual("ch", try adjacentString(to: Board.CellIndex(row: 0, col: 3)))
-    XCTAssertEqual("abcegj", try adjacentString(to: Board.CellIndex(row: 1, col: 1)))
-    XCTAssertEqual("ghk", try adjacentString(to: Board.CellIndex(row: 2, col: 3)))
+    XCTAssertEqual("acf", try adjacentString(to: CellIndex(row: 0, col: 1)))
+    XCTAssertEqual("ch", try adjacentString(to: CellIndex(row: 0, col: 3)))
+    XCTAssertEqual("abcegj", try adjacentString(to: CellIndex(row: 1, col: 1)))
+    XCTAssertEqual("ghk", try adjacentString(to: CellIndex(row: 2, col: 3)))
   }
   
   func testNoBoardString() {
@@ -193,15 +193,15 @@ class BoardTest: XCTestCase {
     let numCols = 5
     board = Board(rows: numRows, cols: numCols)
     
-    var set: Set<Board.CellIndex> = Set()
+    var set: Set<CellIndex> = Set()
     for index in board {
       set.insert(index)
     }
 
-    var verificationSet: Set<Board.CellIndex> = Set()
+    var verificationSet: Set<CellIndex> = Set()
     for row in 0..<numRows {
       for col in 0..<numCols {
-        let index = Board.CellIndex(row: row, col: col)
+        let index = CellIndex(row: row, col: col)
         verificationSet.insert(index)
       }
     }

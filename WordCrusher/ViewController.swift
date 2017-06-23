@@ -12,6 +12,7 @@ import RxSwift
 import StreamReader
 
 class ViewController: NSViewController {
+  var boardView: BoardView!
   var boardViewModel: BoardViewModel!
   
   let disposeBag = DisposeBag()
@@ -19,11 +20,12 @@ class ViewController: NSViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    let board = try! Board(rows: 4, cols: 5)
+    let board = Board(rows: 4, cols: 5)
     boardViewModel = BoardViewModel(board: board)
-    let boardView = BoardView(frame: view.bounds, viewModel: boardViewModel)
+    boardView = BoardView(frame: view.bounds)
     boardView.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
     view.addSubview(boardView)
+    boardView.board = board
     
 //    for foo in board {
 //      print(foo)
@@ -79,7 +81,13 @@ class ViewController: NSViewController {
   }
   
   func buttonTapped(_ sender: Any?) {
-    boardViewModel.activeCell_.value = Board.CellIndex(row: 5, col: 5)
+//    boardViewModel.activeCell_.value = CellIndex(row: 5, col: 5)
+//    boardView.board = Board(rows: 10, cols: 10)
+    if boardView.activeCell == nil {
+      boardView.activeCell = CellIndex(row: 2, col: 3)
+    } else {
+      boardView.activeCell = CellIndex(row: 3, col: 0)
+    }
   }
 
   override var representedObject: Any? {

@@ -15,7 +15,7 @@ class BoardViewModel {
   }
   private let boardSubject: BehaviorSubject<Board>
   
-  var activeCell_ = Variable<Board.CellIndex>(Board.CellIndex.zero)
+  var activeCell_ = Variable<CellIndex>(CellIndex.zero)
   
   init(board: Board) {
     boardSubject = BehaviorSubject(value: board)

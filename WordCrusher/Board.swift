@@ -29,20 +29,9 @@ import Foundation
    For example, the neighbors of (1, 2) are (0, 2), (2, 2), (1, 1), (1, 3), (2, 1), (2, 3).
  */
 class Board {
-  typealias CellIndex = CellIndex_
-
-  private struct Cell {
-    let letter: Character
-    var visited: Bool = false
-
-    init(letter: Character) {
-      self.letter = letter
-    }
-  }
-
   let numRows: Int
   let numCols: Int
-  private var cells: [Cell]
+  fileprivate var cells: [Cell]
   
   var numCells: Int { return numRows * numCols }
 
@@ -63,13 +52,6 @@ class Board {
     }
   }
   
-  subscript(row: Int, col: Int) -> Character {
-    let index = CellIndex(row: row, col: col)
-    assert(isIndexInBoard(index: index), "[\(row), \(col)] is out of range: [\(numRows), \(numCols)]")
-    let arrayIndex = row * numCols + col
-    return cells[arrayIndex].letter
-  }
-
   fileprivate func isIndexInBoard(index: CellIndex) -> Bool {
     return 0 ..< numRows ~= index.row && 0 ..< numCols ~= index.col
   }
@@ -167,6 +149,18 @@ class Board {
   }
 }
 
+extension Board {
+  subscript(cellIndex: CellIndex) -> Character {
+    assert(isIndexInBoard(index: cellIndex), "[\(cellIndex.row), \(cellIndex.col)] is out of range: [\(numRows), \(numCols)]")
+    return cells[cellIndex.row * numCols + cellIndex.col].letter
+  }
+  
+  subscript(row: Int, col: Int) -> Character {
+    let index = CellIndex(row: row, col: col)
+    return self[index]
+  }
+}
+
 extension Board : Sequence {
   class BoardIterator : IteratorProtocol {
     typealias Element = CellIndex
@@ -204,10 +198,19 @@ extension Board : Sequence {
   }
 }
 
-class CellIndex_ : Equatable, Hashable {
+fileprivate struct Cell {
+  let letter: Character
+  var visited: Bool = false
+  
+  init(letter: Character) {
+    self.letter = letter
+  }
+}
+
+struct CellIndex : Equatable, Hashable {
   public var hashValue: Int { return row.hashValue ^ col.hashValue }
   
-  static let zero = CellIndex_(row: 0, col: 0)
+  static let zero = CellIndex(row: 0, col: 0)
   
   let row: Int
   let col: Int
@@ -216,7 +219,7 @@ class CellIndex_ : Equatable, Hashable {
     self.col = col
   }
   
-  public static func ==(lhs: CellIndex_, rhs: CellIndex_) -> Bool {
+  public static func ==(lhs: CellIndex, rhs: CellIndex) -> Bool {
     return lhs.row == rhs.row && lhs.col == rhs.col
   }
 }

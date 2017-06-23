@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		6F1E0EEA1E9F2B1215A39FCF /* Pods_WordCrusher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30F6AF43F9EEBD1A886F7ABE /* Pods_WordCrusher.framework */; };
 		B98387D1A9BEA563911B3A69 /* Pods_WordCrusherTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5166DBC4E3262AA92E07A7BE /* Pods_WordCrusherTests.framework */; };
+		C756C5CA1EFD4CCC002E0E73 /* Errs.swift in Sources */ = {isa = PBXBuildFile; fileRef = C756C5C91EFD4CCC002E0E73 /* Errs.swift */; };
 		C782CC921EF97830003E6E49 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C782CC911EF97830003E6E49 /* AppDelegate.swift */; };
 		C782CC941EF97830003E6E49 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C782CC931EF97830003E6E49 /* ViewController.swift */; };
 		C782CC961EF97830003E6E49 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C782CC951EF97830003E6E49 /* Assets.xcassets */; };
@@ -36,6 +37,7 @@
 		30F6AF43F9EEBD1A886F7ABE /* Pods_WordCrusher.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WordCrusher.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5166DBC4E3262AA92E07A7BE /* Pods_WordCrusherTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WordCrusherTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		757DC797BBEE95D1115569DA /* Pods-WordCrusherTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WordCrusherTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WordCrusherTests/Pods-WordCrusherTests.debug.xcconfig"; sourceTree = "<group>"; };
+		C756C5C91EFD4CCC002E0E73 /* Errs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Errs.swift; sourceTree = "<group>"; };
 		C782CC8E1EF97830003E6E49 /* WordCrusher.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WordCrusher.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C782CC911EF97830003E6E49 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C782CC931EF97830003E6E49 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -108,6 +110,7 @@
 		C782CC901EF97830003E6E49 /* WordCrusher */ = {
 			isa = PBXGroup;
 			children = (
+				C756C5C91EFD4CCC002E0E73 /* Errs.swift */,
 				C79B511A1EFC158A00BFA96B /* ViewModels */,
 				C7B3EA351EFB6925000B1BDE /* Views */,
 				C7EFEEAB1EF97AB7008D2F78 /* Data Structures */,
@@ -365,6 +368,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C756C5CA1EFD4CCC002E0E73 /* Errs.swift in Sources */,
 				C7EFEEAD1EF97AD1008D2F78 /* Trie.swift in Sources */,
 				C782CC941EF97830003E6E49 /* ViewController.swift in Sources */,
 				C7B3EA391EFB69A3000B1BDE /* BoardView.swift in Sources */,
