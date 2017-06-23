@@ -46,7 +46,8 @@ class BoardTest: XCTestCase {
     //   X   Y
     // Z   W
     //
-    board = try Board(rows: 2, cols: 4, contents: "QHELZXWY")
+    board = Board(rows: 2, cols: 4, contents: "QHELZXWY")
+    XCTAssertEqual(8, board.numCells)
 
     // "hele" cannot be found without reusing the 'e'.
     let list = board.searchAll(in: trie)
@@ -65,7 +66,8 @@ class BoardTest: XCTestCase {
     //   Q   Y
     // U   R
     //
-    board = try Board(rows: 3, cols: 4, contents: "HXOVBELLUQRY")
+    board = Board(rows: 3, cols: 4, contents: "HXOVBELLUQRY")
+    XCTAssertEqual(12, board.numCells)
 
     let list = board.searchAll(in: trie)
     XCTAssertEqual(["bell", "belly", "hell", "hello"], list.sorted())
@@ -86,18 +88,19 @@ class BoardTest: XCTestCase {
     //     L   Y
     //   L   O
     //
-    board = try Board(rows: 3, cols: 4, contents: "KITTEHSHLLOY")
+    board = Board(rows: 3, cols: 4, contents: "KITTEHSHLLOY")
+    XCTAssertEqual(12, board.numCells)
 
     // Test that it finds all versions of word and that it will find a word that continues another.
-    let list = board.search(from: (1, 1), in: trie)
+    let list = board.search(from: Board.CellIndex(row: 1, col: 1), in: trie)
     XCTAssertEqual(["hell", "hell", "hello"], list.sorted())
 
     // Test that it will stop when nothing matches.
-    let list2 = board.search(from: (1, 3), in: trie)
+    let list2 = board.search(from: Board.CellIndex(row: 1, col: 3), in: trie)
     XCTAssertEqual([], list2)
 
     // Test that it will stop when a word almost matches.
-    let list3 = board.search(from: (0, 0), in: trie)
+    let list3 = board.search(from: Board.CellIndex(row: 0, col: 0), in: trie)
     XCTAssertEqual([], list3)
   }
 
@@ -113,7 +116,8 @@ class BoardTest: XCTestCase {
     //     L   X
     //   L   H
     //
-    board = try Board(rows: 3, cols: 4, contents: "KITTOHEYLLHX")
+    board = Board(rows: 3, cols: 4, contents: "KITTOHEYLLHX")
+    XCTAssertEqual(12, board.numCells)
 
     let list = board.searchAll(in: trie)
     XCTAssertEqual(["hell", "hell", "hello", "hello", "kitty"], list.sorted())
@@ -129,21 +133,79 @@ class BoardTest: XCTestCase {
     //    J   L
     //  I   K
     //
-    board = try Board(rows: 3, cols: 4, contents: "ABCDEFGHIJKL")
+    board = Board(rows: 3, cols: 4, contents: "ABCDEFGHIJKL")
+    XCTAssertEqual(12, board.numCells)
 
+    XCTAssertEqual("a", board[0,0])
+    
     // This little exercise tests both adjacent and lookup.
-
     // Try some even columns
-    XCTAssertEqual("afij", try adjacentString(to: (1, 0)))
-    XCTAssertEqual("cfhjkl", try adjacentString(to: (1, 2)))
-    XCTAssertEqual("bef", try adjacentString(to: (0, 0)))
-    XCTAssertEqual("ej", try adjacentString(to: (2, 0)))
-    XCTAssertEqual("gjl", try adjacentString(to: (2, 2)))
+    XCTAssertEqual("afij", try adjacentString(to: Board.CellIndex(row: 1, col: 0)))
+    XCTAssertEqual("cfhjkl", try adjacentString(to: Board.CellIndex(row: 1, col: 2)))
+    XCTAssertEqual("bef", try adjacentString(to: Board.CellIndex(row: 0, col: 0)))
+    XCTAssertEqual("ej", try adjacentString(to: Board.CellIndex(row: 2, col: 0)))
+    XCTAssertEqual("gjl", try adjacentString(to: Board.CellIndex(row: 2, col: 2)))
 
     // Try some odd columns
-    XCTAssertEqual("acf", try adjacentString(to: (0, 1)))
-    XCTAssertEqual("ch", try adjacentString(to: (0, 3)))
-    XCTAssertEqual("abcegj", try adjacentString(to: (1, 1)))
-    XCTAssertEqual("ghk", try adjacentString(to: (2, 3)))
+    XCTAssertEqual("acf", try adjacentString(to: Board.CellIndex(row: 0, col: 1)))
+    XCTAssertEqual("ch", try adjacentString(to: Board.CellIndex(row: 0, col: 3)))
+    XCTAssertEqual("abcegj", try adjacentString(to: Board.CellIndex(row: 1, col: 1)))
+    XCTAssertEqual("ghk", try adjacentString(to: Board.CellIndex(row: 2, col: 3)))
+  }
+  
+  func testNoBoardString() {
+    board = Board(rows: 2, cols: 3)
+    XCTAssertEqual(6, board.numCells)
+    XCTAssertEqual(".", board[0, 0])
+    XCTAssertEqual(".", board[0, 1])
+    XCTAssertEqual(".", board[0, 2])
+    XCTAssertEqual(".", board[1, 0])
+    XCTAssertEqual(".", board[1, 1])
+    XCTAssertEqual(".", board[1, 2])
+  }
+  
+  func testShortBoard() {
+    board = Board(rows: 2, cols: 3, contents: "ABC")
+    XCTAssertEqual(6, board.numCells)
+    
+    XCTAssertEqual("a", board[0, 0])
+    XCTAssertEqual("b", board[0, 1])
+    XCTAssertEqual("c", board[0, 2])
+    XCTAssertEqual(".", board[1, 0])
+    XCTAssertEqual(".", board[1, 1])
+    XCTAssertEqual(".", board[1, 2])
+  }
+  
+  func testLongBoard() {
+    board = Board(rows: 2, cols: 3, contents: "ABCDEFXXXXX")
+    XCTAssertEqual(6, board.numCells)
+
+    XCTAssertEqual("a", board[0, 0])
+    XCTAssertEqual("b", board[0, 1])
+    XCTAssertEqual("c", board[0, 2])
+    XCTAssertEqual("d", board[1, 0])
+    XCTAssertEqual("e", board[1, 1])
+    XCTAssertEqual("f", board[1, 2])
+  }
+  
+  func testIterator() throws {
+    let numRows = 4
+    let numCols = 5
+    board = Board(rows: numRows, cols: numCols)
+    
+    var set: Set<Board.CellIndex> = Set()
+    for index in board {
+      set.insert(index)
+    }
+
+    var verificationSet: Set<Board.CellIndex> = Set()
+    for row in 0..<numRows {
+      for col in 0..<numCols {
+        let index = Board.CellIndex(row: row, col: col)
+        verificationSet.insert(index)
+      }
+    }
+    
+    XCTAssertEqual(set, verificationSet)
   }
 }

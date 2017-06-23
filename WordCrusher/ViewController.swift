@@ -25,6 +25,10 @@ class ViewController: NSViewController {
     boardView.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
     view.addSubview(boardView)
     
+//    for foo in board {
+//      print(foo)
+//    }
+    
     let button = NSButton(title: "A button", target: self, action: #selector(buttonTapped(_:)))
     view.addSubview(button)
 
@@ -39,6 +43,12 @@ class ViewController: NSViewController {
             trie.insert(word: line)
           }
         }
+        
+        let myboard = Board(rows: 5, cols: 6, contents: "rrahrbysheruprrelaottboereyckt")
+        myboard.searchAll(in: trie) { word in
+          if word.characters.count > 7 { Swift.print(word) }
+        }
+        
         return trie
       }
       .shareReplay(1)
@@ -69,7 +79,7 @@ class ViewController: NSViewController {
   }
   
   func buttonTapped(_ sender: Any?) {
-    boardViewModel.setActiveCell(index: Board.CellIndex(row: 5, col: 5))
+    boardViewModel.activeCell_.value = Board.CellIndex(row: 5, col: 5)
   }
 
   override var representedObject: Any? {

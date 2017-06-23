@@ -15,22 +15,9 @@ class BoardViewModel {
   }
   private let boardSubject: BehaviorSubject<Board>
   
-  var activeCell_: Observable<Board.CellIndex> {
-    return activeCellSubject.asObservable()
-  }
-  private let activeCellSubject = BehaviorSubject(value: Board.CellIndex(row: 0, col: 0))
-  
-  var changedCell_: Observable<Board.CellIndex> {
-    return changedCellSubject.asObservable()
-  }
-  private let changedCellSubject = PublishSubject<Board.CellIndex>()
+  var activeCell_ = Variable<Board.CellIndex>(Board.CellIndex.zero)
   
   init(board: Board) {
     boardSubject = BehaviorSubject(value: board)
-  }
-  
-  // TODO: This is kind of ugly. Can you fix it?
-  func setActiveCell(index: Board.CellIndex) {
-    activeCellSubject.onNext(index)
   }
 }

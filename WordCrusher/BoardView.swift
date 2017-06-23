@@ -24,9 +24,6 @@ fileprivate let corners =
 class BoardView: NSView {
   let disposeBag = DisposeBag()
 
-  // (row, col)
-  var dimensions: Variable<(Int, Int)> = Variable((0, 0) as (Int, Int))
-  
   // The radius of all of the hexes in the grid
   // (The radius of a hex is the distance from the center to a vertex.
   //  It is also the radius of a circle through all of the vertices.
@@ -39,50 +36,45 @@ class BoardView: NSView {
     }
   }
   
+  var centers: [(Board.CellIndex, CGPoint)] = []
+  
   init(frame frameRect: NSRect, viewModel: BoardViewModel) {
-    self.radius = 20.0
+    self.radius = 25.0
     
     super.init(frame: frameRect)
     
     // If the board changes, load the new dimensions.
-    viewModel.board_
-      .map { board -> (Int, Int) in return (board.numRows, board.numCols) }
-      .asDriver(onErrorJustReturn: (0,0))
-      .drive(dimensions)
-      .disposed(by: disposeBag)
-    
-    // If the dimensions change, redraw.
-    dimensions
-      .asObservable()
-      .asDriver(onErrorJustReturn: (0, 0))
-      .drive(onNext: { [weak self] (numRows, numCols) in
-        guard let view = self else { return }
-        view.setNeedsDisplay(view.bounds)
-      })
-      .disposed(by: disposeBag)
-    
-    // If the activeCell changes, redraw.
-    viewModel.activeCell_
-      .asDriver(onErrorJustReturn: Board.CellIndex.zero)
-      .drive(onNext: { [weak self] _ in
-        guard let view = self else { return }
-        Swift.print("active cell changed")
-        view.setNeedsDisplay(view.bounds)
-      })
-      .disposed(by: disposeBag)
-    
-    viewModel.changedCell_
-      .startWith(Board.CellIndex.zero)
-      .asDriver(onErrorJustReturn: Board.CellIndex.zero)
-      .drive(onNext: { [weak self] _ in
-        guard let view = self else { return }
-        view.setNeedsDisplay(view.bounds)        
-      })
-      .disposed(by: disposeBag)
+//    viewModel.board_
+//      .map { board -> (Int, Int) in return (board.numRows, board.numCols) }
+//      .asDriver(onErrorJustReturn: (0,0))
+//      .drive(boardSize)
+//      .disposed(by: disposeBag)
+//    
+//    // If the dimensions change, redraw.
+//    boardSize
+//      .asObservable()
+//      .asDriver(onErrorJustReturn: (0, 0))
+//      .drive(onNext: { [weak self] (numRows, numCols) in
+//        guard let view = self else { return }
+//        view.setNeedsDisplay(view.bounds)
+//        
+//        view.updateCenters()
+//      })
+//      .disposed(by: disposeBag)
+//    
+//    // If the activeCell changes, redraw.
+//    viewModel.activeCell_
+//      .asDriver(onErrorJustReturn: Board.CellIndex.zero)
+//      .drive(onNext: { [weak self] _ in
+//        guard let view = self else { return }
+//        Swift.print("active cell changed")
+//        view.setNeedsDisplay(view.bounds)
+//      })
+//      .disposed(by: disposeBag)
   }
   
   required init?(coder: NSCoder) {
-    self.dimensions.value = (5, 5)
+//    self.boardSize.value = (5, 5)
     self.radius = 20.0
     super.init(coder: coder)
   }
@@ -132,13 +124,23 @@ class BoardView: NSView {
     context.scaleBy(x: 1.0, y: -1.0)
     context.translateBy(x: 0, y: -self.bounds.size.height)
     
+    let bgcolor = NSColor(calibratedRed: 0.45, green: 0.45, blue: 1.0, alpha: 1.0).cgColor
+    context.setFillColor(bgcolor)
+    context.fill(bounds)
+    
+    
     let firstHexCenter = CGPoint(x: inset.left + radius, y: inset.top + rad3 * radius)
-    let firstRowCenters = centersForRow(at: firstHexCenter, cols: dimensions.value.1)
-    let allCenters = copyRowCenters(firstRowCenters, count: dimensions.value.0)
+    let firstRowCenters = centersForRow(at: firstHexCenter, cols: 2)//boardSize.value.1)
+    let allCenters = copyRowCenters(firstRowCenters, count: 4)//boardSize.value.0)
     let hexPaths = allCenters.map { pathForPoly(points: hexPoints(at: $0, radius: radius)) }
 
     hexPaths.forEach { path in
+      context.setFillColor(NSColor.blue.cgColor)
       context.addPath(path)
+      context.fillPath()
+
+      context.addPath(path)
+      context.setLineWidth(2.0)
       context.strokePath()
     }
   }
