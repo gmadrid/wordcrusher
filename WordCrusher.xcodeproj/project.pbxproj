@@ -11,6 +11,7 @@
 		B98387D1A9BEA563911B3A69 /* Pods_WordCrusherTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5166DBC4E3262AA92E07A7BE /* Pods_WordCrusherTests.framework */; };
 		C72F3D9D1EFE0DD7003C3DFE /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = C72F3D9C1EFE0DD7003C3DFE /* Util.swift */; };
 		C756C5CA1EFD4CCC002E0E73 /* Errs.swift in Sources */ = {isa = PBXBuildFile; fileRef = C756C5C91EFD4CCC002E0E73 /* Errs.swift */; };
+		C775A6C31EFEABB3009B61FE /* BoardView+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = C775A6C21EFEABB3009B61FE /* BoardView+Rx.swift */; };
 		C782CC921EF97830003E6E49 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C782CC911EF97830003E6E49 /* AppDelegate.swift */; };
 		C782CC941EF97830003E6E49 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C782CC931EF97830003E6E49 /* ViewController.swift */; };
 		C782CC961EF97830003E6E49 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C782CC951EF97830003E6E49 /* Assets.xcassets */; };
@@ -40,6 +41,7 @@
 		757DC797BBEE95D1115569DA /* Pods-WordCrusherTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WordCrusherTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WordCrusherTests/Pods-WordCrusherTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C72F3D9C1EFE0DD7003C3DFE /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		C756C5C91EFD4CCC002E0E73 /* Errs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Errs.swift; sourceTree = "<group>"; };
+		C775A6C21EFEABB3009B61FE /* BoardView+Rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BoardView+Rx.swift"; sourceTree = "<group>"; };
 		C782CC8E1EF97830003E6E49 /* WordCrusher.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WordCrusher.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C782CC911EF97830003E6E49 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C782CC931EF97830003E6E49 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -138,6 +140,7 @@
 			isa = PBXGroup;
 			children = (
 				C7B3EA381EFB69A3000B1BDE /* BoardView.swift */,
+				C775A6C21EFEABB3009B61FE /* BoardView+Rx.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -373,6 +376,7 @@
 			files = (
 				C756C5CA1EFD4CCC002E0E73 /* Errs.swift in Sources */,
 				C7EFEEAD1EF97AD1008D2F78 /* Trie.swift in Sources */,
+				C775A6C31EFEABB3009B61FE /* BoardView+Rx.swift in Sources */,
 				C782CC941EF97830003E6E49 /* ViewController.swift in Sources */,
 				C72F3D9D1EFE0DD7003C3DFE /* Util.swift in Sources */,
 				C7B3EA391EFB69A3000B1BDE /* BoardView.swift in Sources */,

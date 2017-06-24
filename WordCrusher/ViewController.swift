@@ -30,6 +30,9 @@ class ViewController: NSViewController {
     
     let button = NSButton(title: "A button", target: self, action: #selector(buttonTapped(_:)))
     view.addSubview(button)
+    
+    boardView.rx.activeCellChanged.subscribe(onNext: { _ /* index */ in
+    }).disposed(by: disposeBag)
 
     _ = Observable.just("/usr/share/dict/words")
       .map { path -> Trie in

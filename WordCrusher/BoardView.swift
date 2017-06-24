@@ -43,11 +43,11 @@ private func pathForPoly(points: [CGPoint]) -> CGPath {
   return path
 }
 
-protocol BoardViewDelegate {
-  func activeCellChanged(to cell: CellIndex?)
+@objc protocol BoardViewDelegate {
+  @objc optional func activeCellChanged(to cell: CellIndex?)
 }
 
-class BoardView: NSView {
+public class BoardView: NSView {
   var delegate: BoardViewDelegate?
   
   // The radius of all of the hexes in the grid
@@ -78,9 +78,7 @@ class BoardView: NSView {
     didSet {
       guard oldValue != activeCell else { return }
       setNeedsDisplay(self.bounds)
-      if let d = delegate {
-        d.activeCellChanged(to: activeCell)
-      }
+      delegate?.activeCellChanged?(to: activeCell)
     }
   }
   
@@ -108,7 +106,7 @@ class BoardView: NSView {
     addTrackingArea(trackingArea)
   }
   
-  required init?(coder: NSCoder) {
+  required public init?(coder: NSCoder) {
     super.init(coder: coder)
   }
   
@@ -130,7 +128,7 @@ class BoardView: NSView {
     }
   }
   
-  override func draw(_ dirtyRect: NSRect) {
+  override public func draw(_ dirtyRect: NSRect) {
     super.draw(dirtyRect)
     
     guard let context = NSGraphicsContext.current()?.cgContext else {
@@ -203,11 +201,11 @@ extension BoardView {
     return closestCell
   }
   
-  override func mouseMoved(with event: NSEvent) {
+  override public func mouseMoved(with event: NSEvent) {
     hoverCell = cellContainingPoint(event.locationInWindow)
   }
   
-  override func mouseDown(with event: NSEvent) {
+  override public func mouseDown(with event: NSEvent) {
     activeCell = cellContainingPoint(event.locationInWindow)
   }
 }

@@ -207,8 +207,8 @@ fileprivate struct Cell {
   }
 }
 
-struct CellIndex : Equatable, Hashable {
-  public var hashValue: Int { return row.hashValue ^ col.hashValue }
+@objc public class CellIndex : NSObject {
+  override public var hashValue: Int { return row.hashValue ^ col.hashValue }
   
   static let zero = CellIndex(row: 0, col: 0)
   
