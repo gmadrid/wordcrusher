@@ -16,6 +16,10 @@ private let piOver3 = pi / 3.0
 
 // Some display constants
 private let gridLineWidth = 2.0 as CGFloat
+private let hoverLineWidth = 1.0 as CGFloat
+private let backgroundColor = NSColor(hexColor: "3c466a").cgColor
+private let activeCellColor = NSColor(hexColor: "b0e0e6").cgColor
+private let cellColor = NSColor(hexColor: "6d9dcf").cgColor
 
 // The vertices of a hexagon centered at the origin with unit side-length.
 private let corners =
@@ -133,8 +137,7 @@ class BoardView: NSView {
       return
     }
     
-    let bgcolor = NSColor(calibratedRed: 0.45, green: 0.45, blue: 1.0, alpha: 1.0).cgColor
-    context.setFillColor(bgcolor)
+    context.setFillColor(backgroundColor)
     context.fill(bounds)
 
     guard let board = board else { return }
@@ -144,9 +147,9 @@ class BoardView: NSView {
       let path = pathForPoly(points: hexPoints(at: center, radius: radius))
       context.addPath(path)
       
-      context.setFillColor(NSColor.blue.cgColor)
+      context.setFillColor(cellColor)
       if let active = activeCell, cellIndex == active {
-        context.setFillColor(NSColor.white.cgColor)
+        context.setFillColor(activeCellColor)
       }
       context.fillPath()
       
@@ -156,7 +159,7 @@ class BoardView: NSView {
       
       if let hover = hoverCell, cellIndex == hover {
         let hoverPath = pathForPoly(points: hexPoints(at: center, radius: radius - 5))
-        context.setLineWidth(1)
+        context.setLineWidth(hoverLineWidth)
         context.addPath(hoverPath)
         context.strokePath()
       }
