@@ -16,13 +16,14 @@ class ViewController: NSViewController {
   var boardViewModel: BoardViewModel!
   
   let disposeBag = DisposeBag()
-
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    let board = Board(rows: 4, cols: 5)
+    let board = Board(rows: 5, cols: 6, contents: "abcefghijklmnopqrstuvwxyz")
     boardViewModel = BoardViewModel(board: board)
     boardView = BoardView(frame: view.bounds)
+    boardView.radius = 22
     boardView.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
     view.addSubview(boardView)
     boardView.board = board
@@ -48,7 +49,7 @@ class ViewController: NSViewController {
         
         let myboard = Board(rows: 5, cols: 6, contents: "rrahrbysheruprrelaottboereyckt")
         myboard.searchAll(in: trie) { word in
-          if word.characters.count > 7 { Swift.print(word) }
+//          if word.characters.count > 7 { Swift.print(word) }
         }
         
         return trie
@@ -82,7 +83,6 @@ class ViewController: NSViewController {
   
   func buttonTapped(_ sender: Any?) {
 //    boardViewModel.activeCell_.value = CellIndex(row: 5, col: 5)
-//    boardView.board = Board(rows: 10, cols: 10)
     if boardView.activeCell == nil {
       boardView.activeCell = CellIndex(row: 2, col: 3)
     } else {

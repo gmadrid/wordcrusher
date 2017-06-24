@@ -66,12 +66,72 @@ class BoardView: NSView {
   
   var activeCell: CellIndex? {
     didSet {
+      guard oldValue != activeCell else { return }
+      setNeedsDisplay(self.bounds)
+    }
+  }
+  
+  var hoverCell: CellIndex? {
+    didSet {
+      guard oldValue != hoverCell else { return }
       setNeedsDisplay(self.bounds)
     }
   }
   
   // A map from the cell index to the points. Used for rendering and hit-testing.
   private var centers: [CellIndex : CGPoint] = [:]
+  
+  override init(frame frameRect: NSRect) {
+    super.init(frame: frameRect)
+    
+    let trackingArea = NSTrackingArea(rect: bounds,
+                                      options: [
+                                        .mouseMoved,
+                                        .mouseEnteredAndExited,
+                                        .activeAlways,
+                                        .inVisibleRect],
+                                      owner: self,
+                                      userInfo: nil)
+    addTrackingArea(trackingArea)
+  }
+  
+  required init?(coder: NSCoder) {
+    super.init(coder: coder)
+  }
+  
+  private func closestCell(to point: CGPoint) -> CellIndex? {
+    let closest = centers.min { e1, e2 -> Bool in
+      let d1 = Util.distanceSquared(p1: e1.value, p2: point)
+      let d2 = Util.distanceSquared(p1: e2.value, p2: point)
+      return d1 < d2
+    }
+    return closest?.key
+  }
+  
+  private func cellContainingPoint(_ point: CGPoint) -> CellIndex? {
+    let closestCell_ = closestCell(to: point)
+    guard let closestCell = closestCell_ else { return nil }
+    
+    let closestPt_ = centers[closestCell]
+    guard let closestPt = closestPt_ else {
+      // This should never happen
+      return nil
+    }
+    
+    // Make sure that the point is actually *inside* the closest cell
+    let dist = Util.distanceSquared(p1: closestPt, p2: point)
+    guard dist < radius * radius else { return nil }
+
+    return closestCell
+  }
+  
+  override func mouseMoved(with event: NSEvent) {
+    hoverCell = cellContainingPoint(event.locationInWindow)
+  }
+  
+  override func mouseDown(with event: NSEvent) {
+    activeCell = cellContainingPoint(event.locationInWindow)
+  }
   
   private func recomputeDisplayElements() {
     centers.removeAll()
@@ -86,7 +146,8 @@ class BoardView: NSView {
       let x = inset.left + radius + 1.5 * CGFloat(cellIndex.col) * radius
       let y = inset.top + CGFloat(cellIndex.row + 1) * rad3 * radius
         + CGFloat(cellIndex.col % 2) * -rad3Over2 * radius
-      centers[cellIndex as CellIndex] = CGPoint(x: x, y: y)
+      let invertedY = bounds.height - y
+      centers[cellIndex as CellIndex] = CGPoint(x: x, y: invertedY)
     }
   }
   
@@ -97,17 +158,13 @@ class BoardView: NSView {
       return
     }
     
-    // Move the origin to upper-left.
-//    context.scaleBy(x: 1.0, y: -1.0)
-//    context.translateBy(x: 0, y: -self.bounds.size.height)
-    
     let bgcolor = NSColor(calibratedRed: 0.45, green: 0.45, blue: 1.0, alpha: 1.0).cgColor
     context.setFillColor(bgcolor)
     context.fill(bounds)
 
     guard let board = board else { return }
     
-    context.setLineWidth(gridLineWidth)
+    let textFont = NSFont.boldSystemFont(ofSize: radius/1.5)
     centers.forEach { (cellIndex: CellIndex, center: CGPoint) in
       let path = pathForPoly(points: hexPoints(at: center, radius: radius))
       context.addPath(path)
@@ -119,13 +176,22 @@ class BoardView: NSView {
       context.fillPath()
       
       context.addPath(path)
+      context.setLineWidth(gridLineWidth)
       context.strokePath()
       
+      if let hover = hoverCell, cellIndex == hover {
+        let hoverPath = pathForPoly(points: hexPoints(at: center, radius: radius - 5))
+        context.setLineWidth(1)
+        context.addPath(hoverPath)
+        context.strokePath()
+      }
+
       let letter = String(board[cellIndex])
       if letter != "." {
-        let aStr = CFAttributedStringCreate(kCFAllocatorDefault, letter as CFString, [:] as CFDictionary)
-        let aLine = CTLineCreateWithAttributedString(aStr!)
-        context.textPosition = center
+        let aStr = NSAttributedString(string: letter, attributes: [NSFontAttributeName:textFont])
+        let aLine = CTLineCreateWithAttributedString(aStr)
+        let aLineBounds = CTLineGetBoundsWithOptions(aLine, [])
+        context.textPosition = CGPoint(x: center.x - aLineBounds.width / 2, y: center.y - aLineBounds.height / 2)
         CTLineDraw(aLine, context)
       }
     }
