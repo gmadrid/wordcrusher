@@ -79,7 +79,7 @@ class BoardView: NSView {
   }
   
   // A map from the cell index to the points. Used for rendering and hit-testing.
-  private var centers: [CellIndex : CGPoint] = [:]
+  fileprivate var centers: [CellIndex : CGPoint] = [:]
   
   override init(frame frameRect: NSRect) {
     super.init(frame: frameRect)
@@ -97,40 +97,6 @@ class BoardView: NSView {
   
   required init?(coder: NSCoder) {
     super.init(coder: coder)
-  }
-  
-  private func closestCell(to point: CGPoint) -> CellIndex? {
-    let closest = centers.min { e1, e2 -> Bool in
-      let d1 = Util.distanceSquared(p1: e1.value, p2: point)
-      let d2 = Util.distanceSquared(p1: e2.value, p2: point)
-      return d1 < d2
-    }
-    return closest?.key
-  }
-  
-  private func cellContainingPoint(_ point: CGPoint) -> CellIndex? {
-    let closestCell_ = closestCell(to: point)
-    guard let closestCell = closestCell_ else { return nil }
-    
-    let closestPt_ = centers[closestCell]
-    guard let closestPt = closestPt_ else {
-      // This should never happen
-      return nil
-    }
-    
-    // Make sure that the point is actually *inside* the closest cell
-    let dist = Util.distanceSquared(p1: closestPt, p2: point)
-    guard dist < radius * radius else { return nil }
-
-    return closestCell
-  }
-  
-  override func mouseMoved(with event: NSEvent) {
-    hoverCell = cellContainingPoint(event.locationInWindow)
-  }
-  
-  override func mouseDown(with event: NSEvent) {
-    activeCell = cellContainingPoint(event.locationInWindow)
   }
   
   private func recomputeDisplayElements() {
@@ -197,3 +163,41 @@ class BoardView: NSView {
     }
   }
 }
+
+extension BoardView {
+  private func closestCell(to point: CGPoint) -> CellIndex? {
+    let closest = centers.min { e1, e2 -> Bool in
+      let d1 = Util.distanceSquared(p1: e1.value, p2: point)
+      let d2 = Util.distanceSquared(p1: e2.value, p2: point)
+      return d1 < d2
+    }
+    return closest?.key
+  }
+  
+  private func cellContainingPoint(_ point: CGPoint) -> CellIndex? {
+    let closestCell_ = closestCell(to: point)
+    guard let closestCell = closestCell_ else { return nil }
+    
+    let closestPt_ = centers[closestCell]
+    guard let closestPt = closestPt_ else {
+      // This should never happen
+      return nil
+    }
+    
+    // Make sure that the point is actually *inside* the closest cell
+    let dist = Util.distanceSquared(p1: closestPt, p2: point)
+    guard dist < radius * radius else { return nil }
+    
+    return closestCell
+  }
+  
+  override func mouseMoved(with event: NSEvent) {
+    hoverCell = cellContainingPoint(event.locationInWindow)
+  }
+  
+  override func mouseDown(with event: NSEvent) {
+    activeCell = cellContainingPoint(event.locationInWindow)
+  }
+}
+
+
