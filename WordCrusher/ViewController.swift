@@ -20,17 +20,13 @@ class ViewController: NSViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    let board = Board(rows: 5, cols: 6, contents: "abcefghijklmnopqrstuvwxyz")
+    let board = Board(rows: 5, cols: 6, contents: "abcdefghijklmnopqrstuvwxyz")
     boardViewModel = BoardViewModel(board: board)
     boardView = BoardView(frame: view.bounds)
     boardView.radius = 22
     boardView.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
     view.addSubview(boardView)
     boardView.board = board
-    
-//    for foo in board {
-//      print(foo)
-//    }
     
     let button = NSButton(title: "A button", target: self, action: #selector(buttonTapped(_:)))
     view.addSubview(button)

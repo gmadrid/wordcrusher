@@ -9,16 +9,16 @@
 import Cocoa
 
 // Some mathematical constants that we will use over and over.
-fileprivate let pi: CGFloat = 3.14159265359
-fileprivate let rad3 = sqrt(3.0) as CGFloat
-fileprivate let rad3Over2 = sqrt(3.0) / 2.0 as CGFloat
-fileprivate let piOver3 = pi / 3.0
+private let pi: CGFloat = 3.14159265359
+private let rad3 = sqrt(3.0) as CGFloat
+private let rad3Over2 = sqrt(3.0) / 2.0 as CGFloat
+private let piOver3 = pi / 3.0
 
 // Some display constants
-fileprivate let gridLineWidth = 2.0 as CGFloat
+private let gridLineWidth = 2.0 as CGFloat
 
 // The vertices of a hexagon centered at the origin with unit side-length.
-fileprivate let corners =
+private let corners =
   [ 0, piOver3, 2 * piOver3, 3 * piOver3, 4 * piOver3, 5 * piOver3 ].map { rad in
     return ( CGPoint(x: cos(rad), y: sin(rad)) )
 }
@@ -39,7 +39,13 @@ private func pathForPoly(points: [CGPoint]) -> CGPath {
   return path
 }
 
+protocol BoardViewDelegate {
+  func activeCellChanged(to cell: CellIndex?)
+}
+
 class BoardView: NSView {
+  var delegate: BoardViewDelegate?
+  
   // The radius of all of the hexes in the grid
   // (The radius of a hex is the distance from the center to a vertex.
   //  It is also the radius of a circle through all of the vertices.
@@ -68,6 +74,9 @@ class BoardView: NSView {
     didSet {
       guard oldValue != activeCell else { return }
       setNeedsDisplay(self.bounds)
+      if let d = delegate {
+        d.activeCellChanged(to: activeCell)
+      }
     }
   }
   
