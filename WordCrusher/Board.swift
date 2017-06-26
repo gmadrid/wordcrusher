@@ -32,26 +32,26 @@ class Board {
   let numRows: Int
   let numCols: Int
   fileprivate var cells: [Cell]
-  
+
   var numCells: Int { return numRows * numCols }
 
   init(rows: Int, cols: Int, contents: String? = nil) {
     numRows = rows
     numCols = cols
-    
+
     var correctedString = contents ?? ""
-    
+
     let numCells = rows * cols
     if correctedString.characters.count < numCells {
       correctedString += String(repeating: ".", count: numCells - correctedString.characters.count)
     }
-    
-    cells = zip(0..<numCells, correctedString.lowercased().characters)
-      .map { (i, ch) in
+
+    cells = zip(0 ..< numCells, correctedString.lowercased().characters)
+      .map { _, ch in
         return Cell(letter: ch)
-    }
+      }
   }
-  
+
   fileprivate func isIndexInBoard(index: CellIndex) -> Bool {
     return 0 ..< numRows ~= index.row && 0 ..< numCols ~= index.col
   }
@@ -59,7 +59,7 @@ class Board {
   func setChar(at cellIndex: CellIndex, ch: Character) {
     
   }
-  
+
   func searchAll(in trie: Trie, maxDepth: UInt = UInt.max, cb: (String) -> Void) {
     for row in 0 ..< numRows {
       for col in 0 ..< numCols {
@@ -127,20 +127,20 @@ class Board {
   func adjacent(to index: CellIndex) -> [CellIndex] {
     let offsets: [CellIndex]
     if index.col % 2 == 0 {
-      offsets = [(-1, 0), (1, 0), (0, 1), (1, 1), (0, -1), (1, -1)].map { (row, col) in
-        return CellIndex(row: row, col: col)
+      offsets = [(-1, 0), (1, 0), (0, 1), (1, 1), (0, -1), (1, -1)].map { row, col in
+        CellIndex(row: row, col: col)
       }
     } else {
-      offsets = [(1, 0), (-1, 0), (-1, 1), (0, 1), (0, -1), (-1, -1)].map { (row, col) in
-        return CellIndex(row: row, col: col)
+      offsets = [(1, 0), (-1, 0), (-1, 1), (0, 1), (0, -1), (-1, -1)].map { row, col in
+        CellIndex(row: row, col: col)
       }
     }
 
     return offsets.map { offsetindex in
       CellIndex(row: index.row + offsetindex.row, col: index.col + offsetindex.col)
-      }
-      .filter { index in
-        self.isIndexInBoard(index: index)
+    }
+    .filter { index in
+      self.isIndexInBoard(index: index)
     }
   }
 
@@ -158,36 +158,36 @@ extension Board {
     assert(isIndexInBoard(index: cellIndex), "[\(cellIndex.row), \(cellIndex.col)] is out of range: [\(numRows), \(numCols)]")
     return cells[cellIndex.row * numCols + cellIndex.col].letter
   }
-  
+
   subscript(row: Int, col: Int) -> Character {
     let index = CellIndex(row: row, col: col)
     return self[index]
   }
 }
 
-extension Board : Sequence {
-  class BoardIterator : IteratorProtocol {
+extension Board: Sequence {
+  class BoardIterator: IteratorProtocol {
     typealias Element = CellIndex
-    
+
     // Current values are what we will return from the next() call.
     private var currRow = 0
     private var currCol = 0
-    
+
     private let maxRow: Int
     private let maxCol: Int
-    
+
     init(maxRow: Int, maxCol: Int) {
       self.maxRow = maxRow
       self.maxCol = maxCol
     }
-    
+
     func next() -> CellIndex? {
       if currRow >= maxRow {
         return nil
       }
-      
+
       let result = CellIndex(row: currRow, col: currCol)
-      
+
       currCol += 1
       if currCol >= maxCol {
         currCol = 0
@@ -196,7 +196,7 @@ extension Board : Sequence {
       return result
     }
   }
-  
+
   func makeIterator() -> BoardIterator {
     return BoardIterator(maxRow: numRows, maxCol: numCols)
   }
@@ -205,7 +205,7 @@ extension Board : Sequence {
 fileprivate struct Cell {
   let letter: Character
   var visited: Bool = false
-  
+
   init(letter: Character) {
     self.letter = letter
   }
@@ -213,22 +213,22 @@ fileprivate struct Cell {
 
 public struct CellIndex {
   static let zero = CellIndex(row: 0, col: 0)
-  
+
   let row: Int
   let col: Int
-  
+
   init(row: Int, col: Int) {
     self.row = row
     self.col = col
   }
 }
 
-extension CellIndex : Equatable {
+extension CellIndex: Equatable {
   public static func ==(lhs: CellIndex, rhs: CellIndex) -> Bool {
     return lhs.row == rhs.row && lhs.col == rhs.col
   }
 }
 
-extension CellIndex : Hashable {
+extension CellIndex: Hashable {
   public var hashValue: Int { return row.hashValue ^ col.hashValue }
 }

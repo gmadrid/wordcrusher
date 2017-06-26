@@ -14,7 +14,7 @@ extension Reactive where Base: BoardView {
   public var delegate: DelegateProxy {
     return BoardViewDelegateProxy.proxyForObject(base)
   }
-  
+
   public var activeCellChanged: ControlEvent<CellIndex?> {
     let source = delegate
       .methodInvoked(#selector(BoardViewDelegate.activeCellChangedTo(row:col:)))
@@ -22,17 +22,17 @@ extension Reactive where Base: BoardView {
         let row = parameters[0] as! Int, col = parameters[1] as! Int
         if row < 0 || col < 0 { return nil }
         return CellIndex(row: row, col: col)
-    }
+      }
     return ControlEvent(events: source)
   }
 }
 
-class BoardViewDelegateProxy : DelegateProxy, BoardViewDelegate, DelegateProxyType {
+class BoardViewDelegateProxy: DelegateProxy, BoardViewDelegate, DelegateProxyType {
   class func currentDelegateFor(_ object: AnyObject) -> AnyObject? {
     let boardView: BoardView = (object as? BoardView)!
     return boardView.delegate as AnyObject
   }
-  
+
   class func setCurrentDelegate(_ delegate: AnyObject?, toObject object: AnyObject) {
     let boardView: BoardView = (object as? BoardView)!
     boardView.delegate = delegate as? BoardViewDelegate

@@ -136,8 +136,8 @@ class BoardTest: XCTestCase {
     board = Board(rows: 3, cols: 4, contents: "ABCDEFGHIJKL")
     XCTAssertEqual(12, board.numCells)
 
-    XCTAssertEqual("a", board[0,0])
-    
+    XCTAssertEqual("a", board[0, 0])
+
     // This little exercise tests both adjacent and lookup.
     // Try some even columns
     XCTAssertEqual("afij", try adjacentString(to: CellIndex(row: 1, col: 0)))
@@ -152,7 +152,7 @@ class BoardTest: XCTestCase {
     XCTAssertEqual("abcegj", try adjacentString(to: CellIndex(row: 1, col: 1)))
     XCTAssertEqual("ghk", try adjacentString(to: CellIndex(row: 2, col: 3)))
   }
-  
+
   func testNoBoardString() {
     board = Board(rows: 2, cols: 3)
     XCTAssertEqual(6, board.numCells)
@@ -163,11 +163,11 @@ class BoardTest: XCTestCase {
     XCTAssertEqual(".", board[1, 1])
     XCTAssertEqual(".", board[1, 2])
   }
-  
+
   func testShortBoard() {
     board = Board(rows: 2, cols: 3, contents: "ABC")
     XCTAssertEqual(6, board.numCells)
-    
+
     XCTAssertEqual("a", board[0, 0])
     XCTAssertEqual("b", board[0, 1])
     XCTAssertEqual("c", board[0, 2])
@@ -175,7 +175,7 @@ class BoardTest: XCTestCase {
     XCTAssertEqual(".", board[1, 1])
     XCTAssertEqual(".", board[1, 2])
   }
-  
+
   func testLongBoard() {
     board = Board(rows: 2, cols: 3, contents: "ABCDEFXXXXX")
     XCTAssertEqual(6, board.numCells)
@@ -187,25 +187,25 @@ class BoardTest: XCTestCase {
     XCTAssertEqual("e", board[1, 1])
     XCTAssertEqual("f", board[1, 2])
   }
-  
+
   func testIterator() throws {
     let numRows = 4
     let numCols = 5
     board = Board(rows: numRows, cols: numCols)
-    
+
     var set: Set<CellIndex> = Set()
     for index in board {
       set.insert(index)
     }
 
     var verificationSet: Set<CellIndex> = Set()
-    for row in 0..<numRows {
-      for col in 0..<numCols {
+    for row in 0 ..< numRows {
+      for col in 0 ..< numCols {
         let index = CellIndex(row: row, col: col)
         verificationSet.insert(index)
       }
     }
-    
+
     XCTAssertEqual(set, verificationSet)
   }
 }

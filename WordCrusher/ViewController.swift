@@ -14,30 +14,30 @@ import StreamReader
 class ViewController: NSViewController {
   var boardView: BoardView!
   var boardViewModel: BoardViewModel!
-  
+
   let disposeBag = DisposeBag()
-  
+
   override func viewDidLoad() {
     super.viewDidLoad()
-    
+
     let board = Board(rows: 5, cols: 6, contents: "abcdefghijklmnopqrstuvwxyz")
-    
+
     boardView = BoardView(frame: view.bounds)
     boardView.radius = 22
     boardView.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
     boardView.board = board
     view.addSubview(boardView)
-    
+
     let charInput = Variable<Character>("a")
-    
+
     boardViewModel = BoardViewModel(board: board,
                                     activeCell: boardView.rx.activeCellChanged.asObservable(),
                                     charInput: charInput.asObservable())
-    
+
     boardView.activeCell = CellIndex(row: 1, col: 1)
     charInput.value = "D"
     charInput.value = "F"
-    
+
     let button = NSButton(title: "A button", target: self, action: #selector(buttonTapped(_:)))
     view.addSubview(button)
 
@@ -45,25 +45,25 @@ class ViewController: NSViewController {
       .map { path -> Trie in
         let trie = Trie()
         let wordStream = StreamReader(path: path)
-        // TODO error
+        // TODO: error
         while let line = wordStream?.nextLine() {
           // No dictionary words shorter than 3.
           if line.characters.count > 2 {
             trie.insert(word: line)
           }
         }
-        
+
         let myboard = Board(rows: 5, cols: 6, contents: "rrahrbysheruprrelaottboereyckt")
-        myboard.searchAll(in: trie) { word in
-//          if word.characters.count > 7 { Swift.print(word) }
+        myboard.searchAll(in: trie) { _ in
+          //          if word.characters.count > 7 { Swift.print(word) }
         }
-        
+
         return trie
       }
       .shareReplay(1)
       .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
       .asDriver(onErrorJustReturn: Trie())
-      .drive(onNext: { trie in })
+      .drive(onNext: { _ in })
 
     //    print("Loading dict")
     //    let wordsStream = StreamReader(path: "/usr/share/dict/words")
@@ -84,11 +84,10 @@ class ViewController: NSViewController {
     //    board.searchAll(in: trie) { word in
     //      print(word)
     //    }
-    
   }
-  
-  func buttonTapped(_ sender: Any?) {
-//    boardViewModel.activeCell_.value = CellIndex(row: 5, col: 5)
+
+  func buttonTapped(_: Any?) {
+    //    boardViewModel.activeCell_.value = CellIndex(row: 5, col: 5)
     if boardView.activeCell == nil {
       boardView.activeCell = CellIndex(row: 2, col: 3)
     } else {
