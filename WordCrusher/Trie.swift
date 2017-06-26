@@ -9,11 +9,11 @@
 import Foundation
 
 /**
- - Read from file (one word per line)
-   (Plurals?)
- - insert word
- - Query letter by letter.
- - Query by prefix
+ * - Read from file (one word per line)
+ *   (Plurals?)
+ * - insert word
+ * - Query letter by letter.
+ * - Query by prefix
  */
 
 fileprivate class TrieNode {

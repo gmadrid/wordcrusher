@@ -9,24 +9,24 @@
 import Foundation
 
 /**
-  The WordCrusher board is defined as a RxC hexagonal grid.
-  - Rows ars staggered
-  - Columns are straight
-
-  So, a 3x4 board:
-
-        1   3
-      0   2
-        1   3
-      0   2
-        1   3
-      0   2
-
-   Each row starts counting columns at zero, and the columns are staggered
-   up and down.
-
-   Since the grid is hexagonal, each cell has potentially 6 neighbors.
-   For example, the neighbors of (1, 2) are (0, 2), (2, 2), (1, 1), (1, 3), (2, 1), (2, 3).
+ * The WordCrusher board is defined as a RxC hexagonal grid.
+ * - Rows ars staggered
+ * - Columns are straight
+ *
+ * So, a 3x4 board:
+ *
+ *        1   3
+ *      0   2
+ *        1   3
+ *      0   2
+ *        1   3
+ *      0   2
+ *
+ * Each row starts counting columns at zero, and the columns are staggered
+ * up and down.
+ *
+ * Since the grid is hexagonal, each cell has potentially 6 neighbors.
+ * For example, the neighbors of (1, 2) are (0, 2), (2, 2), (1, 1), (1, 3), (2, 1), (2, 3).
  */
 class Board {
   let numRows: Int
