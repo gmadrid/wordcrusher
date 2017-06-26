@@ -44,3 +44,12 @@ extension NSColor {
     self.init(red: rf, green: gf, blue: bf, alpha: 1.0)
   }
 }
+
+func castOrFatalError<T>(_ value: Any!) -> T {
+  let maybeResult: T? = value as? T
+  guard let result = maybeResult else {
+    fatalError("Failure converting from \(value) to \(T.self)")
+  }
+
+  return result
+}

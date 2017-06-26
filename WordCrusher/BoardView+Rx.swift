@@ -15,26 +15,48 @@ extension Reactive where Base: BoardView {
     return BoardViewDelegateProxy.proxyForObject(base)
   }
 
-  public var activeCellChanged: ControlEvent<CellIndex?> {
-    let source = delegate
-      .methodInvoked(#selector(BoardViewDelegate.activeCellChangedTo(row:col:)))
-      .map { parameters -> CellIndex? in
-        let row = parameters[0] as! Int, col = parameters[1] as! Int
-        if row < 0 || col < 0 { return nil }
-        return CellIndex(row: row, col: col)
-      }
-    return ControlEvent(events: source)
+  public var activeCell: ControlProperty<CellIndex?> {
+    let delegate = BoardViewDelegateProxy.proxyForObject(base)
+
+    let source = Observable.deferred { [weak boardView = self.base] in
+      delegate.activeCellSubject.startWith(boardView?.activeCell)
+    }.takeUntil(deallocated)
+
+    let observer = UIBindingObserver(UIElement: base) { (control, value: CellIndex?) in
+      control.activeCell = value
+    }
+
+    return ControlProperty(values: source, valueSink: observer.asObserver())
   }
 }
 
 class BoardViewDelegateProxy: DelegateProxy, BoardViewDelegate, DelegateProxyType {
+  private(set) public weak var boardView: BoardView?
+
+  fileprivate let activeCellSubject = PublishSubject<CellIndex?>()
+
+  public required init(parentObject: AnyObject) {
+    boardView = castOrFatalError(parentObject)
+    super.init(parentObject: parentObject)
+  }
+
   class func currentDelegateFor(_ object: AnyObject) -> AnyObject? {
-    let boardView: BoardView = (object as? BoardView)!
+    let boardView: BoardView = castOrFatalError(object)
     return boardView.delegate as AnyObject
   }
 
   class func setCurrentDelegate(_ delegate: AnyObject?, toObject object: AnyObject) {
-    let boardView: BoardView = (object as? BoardView)!
+    let boardView: BoardView = castOrFatalError(object)
     boardView.delegate = delegate as? BoardViewDelegate
+  }
+
+  public func activeCellChangedTo(row: Int, col: Int) {
+    let activeCell: CellIndex?
+    if row < 0 || col < 0 {
+      activeCell = nil
+    } else {
+      activeCell = CellIndex(row: row, col: col)
+    }
+    activeCellSubject.on(.next(activeCell))
   }
 }

@@ -31,10 +31,10 @@ class ViewController: NSViewController {
     let charInput = Variable<Character>("a")
 
     boardViewModel = BoardViewModel(board: board,
-                                    activeCell: boardView.rx.activeCellChanged.asObservable(),
+                                    activeCell: boardView.rx.activeCell.asObservable(),
                                     charInput: charInput.asObservable())
 
-    boardView.activeCell = CellIndex(row: 1, col: 1)
+    //    boardView.activeCell = CellIndex(row: 1, col: 1)
     charInput.value = "D"
     charInput.value = "F"
 
@@ -53,11 +53,11 @@ class ViewController: NSViewController {
           }
         }
 
-        let myboard = Board(rows: 5, cols: 6, contents: "rrahrbysheruprrelaottboereyckt")
-        myboard.searchAll(in: trie) { _ in
-          //          if word.characters.count > 7 { Swift.print(word) }
-        }
-
+        //        let myboard = Board(rows: 5, cols: 6, contents: "..........a.....w..s..cr.urlao")
+        //        myboard.searchAll(in: trie) { word in
+        //                    if word.characters.count >= 4 { Swift.print(word) }
+        //        }
+        //
         return trie
       }
       .shareReplay(1)

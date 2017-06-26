@@ -57,7 +57,7 @@ class Board {
   }
 
   func setChar(at cellIndex: CellIndex, ch: Character) {
-    
+    print("FOO: \(ch); \(cellIndex)")
   }
 
   func searchAll(in trie: Trie, maxDepth: UInt = UInt.max, cb: (String) -> Void) {

@@ -28,15 +28,12 @@ class BoardViewModel {
     self.charInput = charInput
 
     charInput.flatMapLatest { ch -> Observable<(CellIndex?, Character)> in
-      print("flatmapping: \(ch)")
-      return activeCell.map { cellIndex in
-        print("in map: \(ch) === \(cellIndex)")
+      activeCell.map { cellIndex in
         return (cellIndex, ch)
       }
     }
     .subscribe(onNext: { pair in
       let (activeCell_, ch) = pair
-      print("FOO: \(ch); \(activeCell_)")
       guard let activeCell = activeCell_ else { return }
 
       board.setChar(at: activeCell, ch: ch)
