@@ -21,18 +21,25 @@ class ViewController: NSViewController {
     super.viewDidLoad()
     
     let board = Board(rows: 5, cols: 6, contents: "abcdefghijklmnopqrstuvwxyz")
-    boardViewModel = BoardViewModel(board: board)
+    
     boardView = BoardView(frame: view.bounds)
     boardView.radius = 22
     boardView.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
-    view.addSubview(boardView)
     boardView.board = board
+    view.addSubview(boardView)
+    
+    let charInput = Variable<Character>("a")
+    
+    boardViewModel = BoardViewModel(board: board,
+                                    activeCell: boardView.rx.activeCellChanged.asObservable(),
+                                    charInput: charInput.asObservable())
+    
+    boardView.activeCell = CellIndex(row: 1, col: 1)
+    charInput.value = "D"
+    charInput.value = "F"
     
     let button = NSButton(title: "A button", target: self, action: #selector(buttonTapped(_:)))
     view.addSubview(button)
-    
-    boardView.rx.activeCellChanged.subscribe(onNext: { _ /* index */ in
-    }).disposed(by: disposeBag)
 
     _ = Observable.just("/usr/share/dict/words")
       .map { path -> Trie in

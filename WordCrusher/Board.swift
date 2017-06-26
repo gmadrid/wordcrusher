@@ -56,6 +56,10 @@ class Board {
     return 0 ..< numRows ~= index.row && 0 ..< numCols ~= index.col
   }
 
+  func setChar(at cellIndex: CellIndex, ch: Character) {
+    
+  }
+  
   func searchAll(in trie: Trie, maxDepth: UInt = UInt.max, cb: (String) -> Void) {
     for row in 0 ..< numRows {
       for col in 0 ..< numCols {
@@ -207,9 +211,7 @@ fileprivate struct Cell {
   }
 }
 
-@objc public class CellIndex : NSObject {
-  override public var hashValue: Int { return row.hashValue ^ col.hashValue }
-  
+public struct CellIndex {
   static let zero = CellIndex(row: 0, col: 0)
   
   let row: Int
@@ -219,8 +221,14 @@ fileprivate struct Cell {
     self.row = row
     self.col = col
   }
-  
+}
+
+extension CellIndex : Equatable {
   public static func ==(lhs: CellIndex, rhs: CellIndex) -> Bool {
     return lhs.row == rhs.row && lhs.col == rhs.col
   }
+}
+
+extension CellIndex : Hashable {
+  public var hashValue: Int { return row.hashValue ^ col.hashValue }
 }

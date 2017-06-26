@@ -17,9 +17,11 @@ extension Reactive where Base: BoardView {
   
   public var activeCellChanged: ControlEvent<CellIndex?> {
     let source = delegate
-      .methodInvoked(#selector(BoardViewDelegate.activeCellChanged(to:)))
-      .map { parameters in
-        return parameters[0] as? CellIndex ?? nil
+      .methodInvoked(#selector(BoardViewDelegate.activeCellChangedTo(row:col:)))
+      .map { parameters -> CellIndex? in
+        let row = parameters[0] as! Int, col = parameters[1] as! Int
+        if row < 0 || col < 0 { return nil }
+        return CellIndex(row: row, col: col)
     }
     return ControlEvent(events: source)
   }

@@ -44,7 +44,8 @@ private func pathForPoly(points: [CGPoint]) -> CGPath {
 }
 
 @objc protocol BoardViewDelegate {
-  @objc optional func activeCellChanged(to cell: CellIndex?)
+  // (-1, -1) indicates no active cell
+  @objc optional func activeCellChangedTo(row: Int, col: Int)
 }
 
 public class BoardView: NSView {
@@ -78,7 +79,7 @@ public class BoardView: NSView {
     didSet {
       guard oldValue != activeCell else { return }
       setNeedsDisplay(self.bounds)
-      delegate?.activeCellChanged?(to: activeCell)
+      delegate?.activeCellChangedTo?(row: activeCell?.row ?? -1, col: activeCell?.col ?? -1)
     }
   }
   
