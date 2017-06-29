@@ -57,7 +57,9 @@ class Board {
   }
 
   func setChar(at cellIndex: CellIndex, ch: Character) {
-    print("FOO: \(ch); \(cellIndex)")
+    let arrayIndex = cellIndex.row * numCols + cellIndex.col
+    let newCell = Cell(letter: ch)
+    cells[arrayIndex] = newCell
   }
 
   func searchAll(in trie: Trie, maxDepth: UInt = UInt.max, cb: (String) -> Void) {
@@ -195,6 +197,20 @@ extension Board: Sequence {
       }
       return result
     }
+  }
+  
+  func nextCell(cellIndex: CellIndex) -> CellIndex {
+    var row = cellIndex.row
+    var col = cellIndex.col + 1
+    if col >= numCols {
+      col = 0
+      row += 1
+    }
+    if row >= numRows {
+      row = 0
+      col = 0
+    }
+    return CellIndex(row: row, col: col)
   }
 
   func makeIterator() -> BoardIterator {

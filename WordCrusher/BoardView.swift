@@ -46,6 +46,7 @@ private func pathForPoly(points: [CGPoint]) -> CGPath {
 @objc protocol BoardViewDelegate {
   // (-1, -1) indicates no active cell
   @objc optional func activeCellChangedTo(row: Int, col: Int)
+  @objc optional func keyReceived(chs: String)
 }
 
 public class BoardView: NSView {
@@ -172,6 +173,17 @@ public class BoardView: NSView {
         context.textPosition = CGPoint(x: center.x - aLineBounds.width / 2, y: center.y - aLineBounds.height / 2)
         CTLineDraw(aLine, context)
       }
+    }
+  }
+}
+
+extension BoardView {
+  override public var acceptsFirstResponder: Bool { return true }
+  
+  override public func keyDown(with event: NSEvent) {
+    // TODO: only handle unadorned a-zA-Z
+    if let chs = event.characters {
+      delegate?.keyReceived?(chs: chs)
     }
   }
 }
