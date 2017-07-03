@@ -24,8 +24,8 @@ class BoardTest: XCTestCase {
 
   private func adjacentString(to index: CellIndex) throws -> String {
     let adjacent =
-      try board.adjacent(to: index)
-      .map { try board.lookup(index: $0) }
+      board.adjacent(to: index)
+      .map { board[$0] ?? "." }
       .sorted()
     return String(adjacent)
   }
@@ -156,12 +156,12 @@ class BoardTest: XCTestCase {
   func testNoBoardString() {
     board = Board(rows: 2, cols: 3)
     XCTAssertEqual(6, board.numCells)
-    XCTAssertEqual(".", board[0, 0])
-    XCTAssertEqual(".", board[0, 1])
-    XCTAssertEqual(".", board[0, 2])
-    XCTAssertEqual(".", board[1, 0])
-    XCTAssertEqual(".", board[1, 1])
-    XCTAssertEqual(".", board[1, 2])
+    XCTAssertNil(board[0, 0])
+    XCTAssertNil(board[0, 1])
+    XCTAssertNil(board[0, 2])
+    XCTAssertNil(board[1, 0])
+    XCTAssertNil(board[1, 1])
+    XCTAssertNil(board[1, 2])
   }
 
   func testShortBoard() {
@@ -171,9 +171,9 @@ class BoardTest: XCTestCase {
     XCTAssertEqual("a", board[0, 0])
     XCTAssertEqual("b", board[0, 1])
     XCTAssertEqual("c", board[0, 2])
-    XCTAssertEqual(".", board[1, 0])
-    XCTAssertEqual(".", board[1, 1])
-    XCTAssertEqual(".", board[1, 2])
+    XCTAssertNil(board[1, 0])
+    XCTAssertNil(board[1, 1])
+    XCTAssertNil(board[1, 2])
   }
 
   func testLongBoard() {

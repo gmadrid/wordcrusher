@@ -31,34 +31,52 @@ import Foundation
 class Board {
   let numRows: Int
   let numCols: Int
-  fileprivate var cells: [Cell]
 
   var numCells: Int { return numRows * numCols }
 
-  init(rows: Int, cols: Int, contents: String? = nil) {
+  fileprivate var cells: [CellContents]
+
+  init(rows: Int, cols: Int, contents contents_: String? = nil) {
     numRows = rows
     numCols = cols
 
-    var correctedString = contents ?? ""
-
+    var contents = contents_ ?? ""
+    
     let numCells = rows * cols
-    if correctedString.characters.count < numCells {
-      correctedString += String(repeating: ".", count: numCells - correctedString.characters.count)
+    if contents.characters.count < numCells {
+      contents += String(repeating: ".", count: numCells - contents.characters.count)
     }
 
-    cells = zip(0 ..< numCells, correctedString.lowercased().characters)
+    cells = zip(0 ..< numCells, contents.lowercased().characters)
       .map { _, ch in
-        return Cell(letter: ch)
+        if "a"..."z" ~= ch {
+          return .letter(ch: ch)
+        } else {
+          return .empty
+        }
       }
+  }
+  
+  fileprivate func arrayIndex(for cellIndex: CellIndex) -> Int {
+    assert(isIndexInBoard(index: cellIndex))
+    return cellIndex.row * numCols + cellIndex.col
   }
 
   fileprivate func isIndexInBoard(index: CellIndex) -> Bool {
     return 0 ..< numRows ~= index.row && 0 ..< numCols ~= index.col
   }
 
-  func setChar(at cellIndex: CellIndex, ch: Character) {
+  // ch must be between "a"..."z" or nil.
+  func setChar(at cellIndex: CellIndex, ch ch_: Character?) {
+
     let arrayIndex = cellIndex.row * numCols + cellIndex.col
-    let newCell = Cell(letter: ch)
+    let newCell: CellContents
+    if let ch = ch_ {
+      assert(Character("a")...Character("z") ~= ch)
+      newCell = .letter(ch: ch)
+    } else {
+      newCell = .empty
+    }
     cells[arrayIndex] = newCell
   }
 
@@ -78,7 +96,8 @@ class Board {
   }
 
   func search(from start: CellIndex, in trie: Trie, maxDepth: UInt = UInt.max, cb: (String) -> Void) {
-    searchHelper(start, trie.search(), "", currentDepth: 0, maxDepth: maxDepth, cb: cb)
+    var visitedSet = Set<CellIndex>()
+    searchHelper(start, trie.search(), "", currentDepth: 0, maxDepth: maxDepth, visited: &visitedSet, cb: cb)
   }
 
   func search(from start: CellIndex, in trie: Trie, maxDepth: UInt = UInt.max) -> [String] {
@@ -94,21 +113,25 @@ class Board {
   // TODO: fix the BUG. This doesn't work with maxDepth = 0
   fileprivate func searchHelper(_ index: CellIndex, _ token: TrieToken, _ soFar: String,
                                 currentDepth: UInt,
-                                maxDepth: UInt, cb: (String) -> Void) {
+                                maxDepth: UInt,
+                                visited: inout Set<CellIndex>,
+                                cb: (String) -> Void) {
     // Upon entry:
     // - Token does NOT include the letter in this cell
     // - The cell has NOT been marked
-    let thisIndex = index.row * numCols + index.col
 
+    
     // If we've already used this cell, it cannot be used again.
-    if cells[thisIndex].visited {
-      return
-    }
+    if visited.contains(index) { return }
 
-    cells[thisIndex].visited = true
-    defer { cells[thisIndex].visited = false }
+    visited.insert(index)
+    defer { visited.remove(index) }
 
-    let thisLetter = cells[thisIndex].letter
+    let thisIndex = arrayIndex(for: index)
+    
+    // Only match when the cell contains letters.
+    guard case let CellContents.letter(thisLetter) = cells[thisIndex] else { return }
+
     guard let thisToken = token.next(thisLetter) else {
       // This letter does not advance the search, so leave but continue searching.
       return
@@ -121,7 +144,7 @@ class Board {
 
     if currentDepth < maxDepth - 1 {
       for nextCell in adjacent(to: index) {
-        searchHelper(nextCell, thisToken, newSoFar, currentDepth: currentDepth + 1, maxDepth: maxDepth, cb: cb)
+        searchHelper(nextCell, thisToken, newSoFar, currentDepth: currentDepth + 1, maxDepth: maxDepth, visited: &visited, cb: cb)
       }
     }
   }
@@ -145,23 +168,18 @@ class Board {
       self.isIndexInBoard(index: index)
     }
   }
-
-  func lookup(index: CellIndex) throws -> Character {
-    let arrayIndex = index.row * numCols + index.col
-    guard 0 ..< cells.count ~= arrayIndex else {
-      throw Errs.indexOutOfRange
-    }
-    return cells[arrayIndex].letter
-  }
 }
 
 extension Board {
-  subscript(cellIndex: CellIndex) -> Character {
+  subscript(cellIndex: CellIndex) -> Character? {
     assert(isIndexInBoard(index: cellIndex), "[\(cellIndex.row), \(cellIndex.col)] is out of range: [\(numRows), \(numCols)]")
-    return cells[cellIndex.row * numCols + cellIndex.col].letter
+    if case let CellContents.letter(ch) = cells[cellIndex.row * numCols + cellIndex.col] {
+      return ch
+    }
+    return nil
   }
 
-  subscript(row: Int, col: Int) -> Character {
+  subscript(row: Int, col: Int) -> Character? {
     let index = CellIndex(row: row, col: col)
     return self[index]
   }
@@ -218,13 +236,9 @@ extension Board: Sequence {
   }
 }
 
-fileprivate struct Cell {
-  let letter: Character
-  var visited: Bool = false
-
-  init(letter: Character) {
-    self.letter = letter
-  }
+fileprivate enum CellContents {
+  case empty
+  case letter(ch: Character)
 }
 
 public struct CellIndex {

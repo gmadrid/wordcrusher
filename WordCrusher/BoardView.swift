@@ -165,9 +165,9 @@ public class BoardView: NSView {
         context.strokePath()
       }
 
-      let letter = String(board[cellIndex])
-      if letter != "." {
-        let aStr = NSAttributedString(string: letter, attributes: [NSFontAttributeName: textFont])
+      
+      if let letter = board[cellIndex] {
+        let aStr = NSAttributedString(string: String(letter), attributes: [NSFontAttributeName: textFont])
         let aLine = CTLineCreateWithAttributedString(aStr)
         let aLineBounds = CTLineGetBoundsWithOptions(aLine, [])
         context.textPosition = CGPoint(x: center.x - aLineBounds.width / 2, y: center.y - aLineBounds.height / 2)

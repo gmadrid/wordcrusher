@@ -37,32 +37,30 @@ class ViewController: NSViewController {
       })
       .disposed(by: disposeBag)
     
-    let button = NSButton(title: "A button", target: self, action: #selector(buttonTapped(_:)))
-    view.addSubview(button)
+    _ = Observable.just("/usr/share/dict/words")
+      .map { path -> Trie in
+        let trie = Trie()
+        let wordStream = StreamReader(path: path)
+        // TODO: error
+        while let line = wordStream?.nextLine() {
+          // No dictionary words shorter than 3.
+          if line.characters.count > 2 {
+            trie.insert(word: line)
+          }
+        }
 
-//    _ = Observable.just("/usr/share/dict/words")
-//      .map { path -> Trie in
-//        let trie = Trie()
-//        let wordStream = StreamReader(path: path)
-//        // TODO: error
-//        while let line = wordStream?.nextLine() {
-//          // No dictionary words shorter than 3.
-//          if line.characters.count > 2 {
-//            trie.insert(word: line)
-//          }
-//        }
-//
-//        let myboard = Board(rows: 5, cols: 6, contents: "deividolnterusaghrmiciifmrefer")
-//        myboard.searchAll(in: trie) { word in
-//          if word.characters.count >= 8 { Swift.print(word) }
-//        }
-//        
-//        return trie
-//      }
-//      .shareReplay(1)
-//      .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
-//      .asDriver(onErrorJustReturn: Trie())
-//      .drive(onNext: { _ in })
+        let myboard = Board(rows: 5, cols: 6, contents: "...............r...m.wa..foeig.alrre")
+        Swift.print("WORDS")
+        myboard.searchAll(in: trie) { word in
+          if word.characters.count >= 6 { Swift.print(word) }
+        }
+        
+        return trie
+      }
+      .shareReplay(1)
+      .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+      .asDriver(onErrorJustReturn: Trie())
+      .drive(onNext: { _ in })
 
     //    print("Loading dict")
     //    let wordsStream = StreamReader(path: "/usr/share/dict/words")
