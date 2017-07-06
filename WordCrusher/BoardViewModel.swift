@@ -37,6 +37,7 @@ class BoardViewModel {
       guard let activeCell = activeCell_ else { return }
 
       board.setChar(at: activeCell, ch: ch)
+      // TODO: board changed.
     })
     .disposed(by: disposeBag)
   }

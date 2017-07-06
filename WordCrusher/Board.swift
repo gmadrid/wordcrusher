@@ -27,6 +27,8 @@ import Foundation
  *
  * Since the grid is hexagonal, each cell has potentially 6 neighbors.
  * For example, the neighbors of (1, 2) are (0, 2), (2, 2), (1, 1), (1, 3), (2, 1), (2, 3).
+ *
+ * TODO: deal with limiting the ch values in the cells to a...z and '.'
  */
 class Board {
   let numRows: Int
@@ -56,8 +58,17 @@ class Board {
     return 0 ..< numRows ~= index.row && 0 ..< numCols ~= index.col
   }
 
+  // This is not bounds checked.
+  fileprivate func arrayIndex(at cellIndex: CellIndex) -> Int {
+    return cellIndex.row * numCols + cellIndex.col
+  }
+
   func setChar(at cellIndex: CellIndex, ch: Character) {
-    print("FOO: \(ch); \(cellIndex)")
+    guard isIndexInBoard(index: cellIndex) else {
+      fatalError("\(cellIndex) is out of range \(numRows)x\(numCols)")
+    }
+    let i = arrayIndex(at: cellIndex)
+    cells[i] = Cell(letter: ch)
   }
 
   func searchAll(in trie: Trie, maxDepth: UInt = UInt.max, cb: (String) -> Void) {

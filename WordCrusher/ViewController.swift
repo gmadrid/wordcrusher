@@ -15,6 +15,8 @@ class ViewController: NSViewController {
   var boardView: BoardView!
   var boardViewModel: BoardViewModel!
 
+  override var acceptsFirstResponder: Bool { Swift.print("AFR"); return true }
+
   let disposeBag = DisposeBag()
 
   override func viewDidLoad() {
@@ -84,10 +86,18 @@ class ViewController: NSViewController {
     //    board.searchAll(in: trie) { word in
     //      print(word)
     //    }
+
+    print("FOOBAR")
+    boardView.becomeFirstResponder()
+    print("BAZ: \(NSApplication.shared().keyWindow)")
+  }
+
+  override func keyDown(with event: NSEvent) {
+    Swift.print(event)
+    super.keyDown(with: event)
   }
 
   func buttonTapped(_: Any?) {
-    //    boardViewModel.activeCell_.value = CellIndex(row: 5, col: 5)
     if boardView.activeCell == nil {
       boardView.activeCell = CellIndex(row: 2, col: 3)
     } else {

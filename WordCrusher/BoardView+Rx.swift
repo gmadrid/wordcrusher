@@ -31,7 +31,7 @@ extension Reactive where Base: BoardView {
 }
 
 class BoardViewDelegateProxy: DelegateProxy, BoardViewDelegate, DelegateProxyType {
-  private(set) public weak var boardView: BoardView?
+  public private(set) weak var boardView: BoardView?
 
   fileprivate let activeCellSubject = PublishSubject<CellIndex?>()
 

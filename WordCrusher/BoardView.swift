@@ -51,6 +51,8 @@ private func pathForPoly(points: [CGPoint]) -> CGPath {
 public class BoardView: NSView {
   var delegate: BoardViewDelegate?
 
+  public override var acceptsFirstResponder: Bool { return true }
+
   // The radius of all of the hexes in the grid
   // (The radius of a hex is the distance from the center to a vertex.
   //  It is also the radius of a circle through all of the vertices.
