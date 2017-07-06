@@ -15,7 +15,7 @@ class BoardViewModel {
   let board: Board
 
   // Inputs
-  let activeCell: ControlProperty<CellIndex?>  // TODO: currently, this is both input and output :-(
+  let activeCell: ControlProperty<CellIndex?> // TODO: currently, this is both input and output :-(
   let charInput: Observable<Character>
 
   // Outputs

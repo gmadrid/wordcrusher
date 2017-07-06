@@ -12,50 +12,75 @@ import RxSwift
 import StreamReader
 
 class ViewController: NSViewController {
-  var boardView: BoardView!
-  var boardViewModel: BoardViewModel!
-  
-  var statusViewModel: StatusViewModel!
-  
-  override var acceptsFirstResponder: Bool { Swift.print("AFR"); return true }
-
   let disposeBag = DisposeBag()
+
+  var boardViewModel: BoardViewModel!
+  var statusViewModel: StatusViewModel!
+
+  private func makeBoardView(board: Board) -> BoardView {
+    let boardView = BoardView()
+    boardView.translatesAutoresizingMaskIntoConstraints = false
+    boardView.radius = 22
+    boardView.board = board
+    return boardView
+  }
+
+  private func makeBoardViewModel(board: Board, boardView: BoardView) -> BoardViewModel {
+    let boardViewModel = BoardViewModel(board: board,
+                                        activeCell: boardView.rx.activeCell,
+                                        charInput: boardView.rx.ch.asObservable())
+    boardViewModel.boardChanged
+      .subscribe(onNext: { [weak boardView] in
+        guard let boardView = boardView else { return }
+        boardView.setNeedsDisplay(boardView.bounds)
+      })
+      .disposed(by: disposeBag)
+
+    return boardViewModel
+  }
+
+  private func makeStatusView() -> NSTextField {
+    let statusView = NSTextField(frame: CGRect.zero)
+    statusView.translatesAutoresizingMaskIntoConstraints = false
+    statusView.backgroundColor = NSColor.clear
+    return statusView
+  }
+
+  private func makeStatusViewModel(statusQueue: Observable<Status>, statusView: NSTextField) -> StatusViewModel {
+    let statusViewModel = StatusViewModel(messages: statusQueue)
+    statusViewModel.text.bind(to: statusView.rx.text).disposed(by: disposeBag)
+    return statusViewModel
+  }
+
+  private func constrainViews(boardView: BoardView, statusView: NSTextField) {
+    boardView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+    boardView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+    boardView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+
+    statusView.leftAnchor.constraint(equalTo: boardView.leftAnchor).isActive = true
+    statusView.rightAnchor.constraint(equalTo: boardView.rightAnchor).isActive = true
+    statusView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+
+    boardView.bottomAnchor.constraint(equalTo: statusView.topAnchor).isActive = true
+  }
 
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    let board = Board(rows: 5, cols: 6, contents: "abcdefghijklmnopqrstuvwxyz")
-
-    boardView = BoardView(frame: view.bounds)
-    boardView.radius = 22
-    boardView.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
-    boardView.board = board
+    //    let board = Board(rows: 5, cols: 6, contents: "abcdefghijklmnopqrstuvwxyz")
+    let board = Board(rows: 6, cols: 6, contents: "............n.....in..ipacipcrteuome")
+    let boardView = makeBoardView(board: board)
     view.addSubview(boardView)
 
-    boardViewModel = BoardViewModel(board: board,
-                                    activeCell: boardView.rx.activeCell,
-                                    charInput: boardView.rx.ch.asObservable())
-    boardViewModel.boardChanged
-      .subscribe(onNext: { [weak self] in
-        self?.boardView.setNeedsDisplay(self?.boardView.bounds ?? CGRect.zero)
-      })
-      .disposed(by: disposeBag)
-    
-    
-    let statusView = NSTextField(frame: CGRect.zero)
-    statusView.translatesAutoresizingMaskIntoConstraints = false
+    let statusView = makeStatusView()
     view.addSubview(statusView)
 
-    statusView.leftAnchor.constraint(equalTo: boardView.leftAnchor).isActive = true
-    statusView.bottomAnchor.constraint(equalTo: boardView.bottomAnchor).isActive = true
-    statusView.widthAnchor.constraint(equalTo: boardView.widthAnchor).isActive = true
-    statusView.heightAnchor.constraint(equalToConstant: 20).isActive = true
-    statusView.backgroundColor = NSColor.clear
-    
+    constrainViews(boardView: boardView, statusView: statusView)
+
     let messages = PublishSubject<Status>()
-    statusViewModel = StatusViewModel(messages: messages.asObservable())
-    statusViewModel.text.bind(to: statusView.rx.text).disposed(by: disposeBag)
-    
+    boardViewModel = makeBoardViewModel(board: board, boardView: boardView)
+    statusViewModel = makeStatusViewModel(statusQueue: messages, statusView: statusView)
+
     _ = Observable.just("/usr/share/dict/words")
       .map { path -> Trie in
         let trie = Trie()
@@ -68,18 +93,17 @@ class ViewController: NSViewController {
           if line.characters.count > 2 {
             trie.insert(word: line)
           }
-          
+
           lineNumber += 1
           messages.onNext(.message("Reading trie...\(lineNumber)"))
         }
         messages.onNext(.message("Searching..."))
 
-        let myboard = Board(rows: 6, cols: 6, contents: "............n.....in..ipacipcrteuome")
         Swift.print("WORDS")
-        myboard.searchAll(in: trie) { word in
+        board.searchAll(in: trie) { word in
           if word.characters.count >= 6 { Swift.print(word) }
         }
-        
+
         messages.onNext(.none)
 
         return trie
@@ -109,9 +133,7 @@ class ViewController: NSViewController {
     //      print(word)
     //    }
 
-    print("FOOBAR")
     boardView.becomeFirstResponder()
-    print("BAZ: \(NSApplication.shared().keyWindow)")
   }
 
   override func keyDown(with event: NSEvent) {
@@ -120,11 +142,6 @@ class ViewController: NSViewController {
   }
 
   func buttonTapped(_: Any?) {
-    if boardView.activeCell == nil {
-      boardView.activeCell = CellIndex(row: 2, col: 3)
-    } else {
-      boardView.activeCell = CellIndex(row: 3, col: 0)
-    }
   }
 
   override var representedObject: Any? {

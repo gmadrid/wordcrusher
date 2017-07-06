@@ -113,6 +113,11 @@ public class BoardView: NSView {
     super.init(coder: coder)
   }
 
+  public override func layout() {
+    super.layout()
+    recomputeDisplayElements()
+  }
+
   private func recomputeDisplayElements() {
     centers.removeAll()
 

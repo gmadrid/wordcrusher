@@ -13,19 +13,19 @@ import RxSwift
 class StatusViewModel {
   let disposeBag = DisposeBag()
   let status = Status.none
-  
+
   // Inputs
   let messages: Observable<Status>
-  
+
   // Outputs:
   let text: Observable<String?>
-  
+
   init(messages: Observable<Status>) {
     self.messages = messages
-    
+
     let textSubject = PublishSubject<String?>()
-    self.text = textSubject
-    
+    text = textSubject
+
     messages.throttle(0.25, scheduler: MainScheduler.asyncInstance)
       .subscribe(onNext: { st in
         textSubject.onNext(st.msg())
