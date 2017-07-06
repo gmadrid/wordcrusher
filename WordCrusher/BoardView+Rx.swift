@@ -28,12 +28,18 @@ extension Reactive where Base: BoardView {
 
     return ControlProperty(values: source, valueSink: observer.asObserver())
   }
+
+  public var ch: ControlEvent<Character> {
+    let delegate = BoardViewDelegateProxy.proxyForObject(base)
+    return ControlEvent(events: delegate.chSubject.asObservable())
+  }
 }
 
 class BoardViewDelegateProxy: DelegateProxy, BoardViewDelegate, DelegateProxyType {
   public private(set) weak var boardView: BoardView?
 
   fileprivate let activeCellSubject = PublishSubject<CellIndex?>()
+  fileprivate let chSubject = PublishSubject<Character>()
 
   public required init(parentObject: AnyObject) {
     boardView = castOrFatalError(parentObject)
@@ -58,5 +64,11 @@ class BoardViewDelegateProxy: DelegateProxy, BoardViewDelegate, DelegateProxyTyp
       activeCell = CellIndex(row: row, col: col)
     }
     activeCellSubject.on(.next(activeCell))
+  }
+
+  public func keyReceived(chs: String) {
+    if let ch = chs.characters.first {
+      chSubject.onNext(ch)
+    }
   }
 }

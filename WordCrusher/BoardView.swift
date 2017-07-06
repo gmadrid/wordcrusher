@@ -46,12 +46,11 @@ private func pathForPoly(points: [CGPoint]) -> CGPath {
 @objc protocol BoardViewDelegate {
   // (-1, -1) indicates no active cell
   @objc optional func activeCellChangedTo(row: Int, col: Int)
+  @objc optional func keyReceived(chs: String)
 }
 
 public class BoardView: NSView {
   var delegate: BoardViewDelegate?
-
-  public override var acceptsFirstResponder: Bool { return true }
 
   // The radius of all of the hexes in the grid
   // (The radius of a hex is the distance from the center to a vertex.
@@ -166,14 +165,24 @@ public class BoardView: NSView {
         context.strokePath()
       }
 
-      let letter = String(board[cellIndex])
-      if letter != "." {
-        let aStr = NSAttributedString(string: letter, attributes: [NSFontAttributeName: textFont])
+      if let letter = board[cellIndex] {
+        let aStr = NSAttributedString(string: String(letter), attributes: [NSFontAttributeName: textFont])
         let aLine = CTLineCreateWithAttributedString(aStr)
         let aLineBounds = CTLineGetBoundsWithOptions(aLine, [])
         context.textPosition = CGPoint(x: center.x - aLineBounds.width / 2, y: center.y - aLineBounds.height / 2)
         CTLineDraw(aLine, context)
       }
+    }
+  }
+}
+
+extension BoardView {
+  public override var acceptsFirstResponder: Bool { return true }
+
+  public override func keyDown(with event: NSEvent) {
+    // TODO: only handle unadorned a-zA-Z
+    if let chs = event.characters {
+      delegate?.keyReceived?(chs: chs)
     }
   }
 }

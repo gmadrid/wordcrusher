@@ -30,18 +30,14 @@ class ViewController: NSViewController {
     boardView.board = board
     view.addSubview(boardView)
 
-    let charInput = Variable<Character>("a")
-
     boardViewModel = BoardViewModel(board: board,
-                                    activeCell: boardView.rx.activeCell.asObservable(),
-                                    charInput: charInput.asObservable())
-
-    //    boardView.activeCell = CellIndex(row: 1, col: 1)
-    charInput.value = "D"
-    charInput.value = "F"
-
-    let button = NSButton(title: "A button", target: self, action: #selector(buttonTapped(_:)))
-    view.addSubview(button)
+                                    activeCell: boardView.rx.activeCell,
+                                    charInput: boardView.rx.ch.asObservable())
+    boardViewModel.boardChanged
+      .subscribe(onNext: { [weak self] in
+        self?.boardView.setNeedsDisplay(self?.boardView.bounds ?? CGRect.zero)
+      })
+      .disposed(by: disposeBag)
 
     _ = Observable.just("/usr/share/dict/words")
       .map { path -> Trie in
@@ -55,11 +51,12 @@ class ViewController: NSViewController {
           }
         }
 
-        //        let myboard = Board(rows: 5, cols: 6, contents: "..........a.....w..s..cr.urlao")
-        //        myboard.searchAll(in: trie) { word in
-        //                    if word.characters.count >= 4 { Swift.print(word) }
-        //        }
-        //
+        let myboard = Board(rows: 5, cols: 6, contents: "...............r...m.wa..foeig.alrre")
+        Swift.print("WORDS")
+        myboard.searchAll(in: trie) { word in
+          if word.characters.count >= 6 { Swift.print(word) }
+        }
+
         return trie
       }
       .shareReplay(1)
