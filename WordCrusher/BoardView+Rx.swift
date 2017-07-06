@@ -15,6 +15,7 @@ extension Reactive where Base: BoardView {
     return BoardViewDelegateProxy.proxyForObject(base)
   }
 
+  /** The current active cell in the board. */
   public var activeCell: ControlProperty<CellIndex?> {
     let delegate = BoardViewDelegateProxy.proxyForObject(base)
 
@@ -29,6 +30,7 @@ extension Reactive where Base: BoardView {
     return ControlProperty(values: source, valueSink: observer.asObserver())
   }
 
+  /** Character stream of typed characters received by Board while in responder chain. */
   public var ch: ControlEvent<Character> {
     let delegate = BoardViewDelegateProxy.proxyForObject(base)
     return ControlEvent(events: delegate.chSubject.asObservable())

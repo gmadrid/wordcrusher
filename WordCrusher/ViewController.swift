@@ -14,7 +14,9 @@ import StreamReader
 class ViewController: NSViewController {
   var boardView: BoardView!
   var boardViewModel: BoardViewModel!
-
+  
+  var statusViewModel: StatusViewModel!
+  
   override var acceptsFirstResponder: Bool { Swift.print("AFR"); return true }
 
   let disposeBag = DisposeBag()
@@ -38,24 +40,47 @@ class ViewController: NSViewController {
         self?.boardView.setNeedsDisplay(self?.boardView.bounds ?? CGRect.zero)
       })
       .disposed(by: disposeBag)
+    
+    
+    let statusView = NSTextField(frame: CGRect.zero)
+    statusView.translatesAutoresizingMaskIntoConstraints = false
+    view.addSubview(statusView)
 
+    statusView.leftAnchor.constraint(equalTo: boardView.leftAnchor).isActive = true
+    statusView.bottomAnchor.constraint(equalTo: boardView.bottomAnchor).isActive = true
+    statusView.widthAnchor.constraint(equalTo: boardView.widthAnchor).isActive = true
+    statusView.heightAnchor.constraint(equalToConstant: 20).isActive = true
+    statusView.backgroundColor = NSColor.clear
+    
+    let messages = PublishSubject<Status>()
+    statusViewModel = StatusViewModel(messages: messages.asObservable())
+    statusViewModel.text.bind(to: statusView.rx.text).disposed(by: disposeBag)
+    
     _ = Observable.just("/usr/share/dict/words")
       .map { path -> Trie in
         let trie = Trie()
         let wordStream = StreamReader(path: path)
         // TODO: error
+        messages.onNext(.message("Reading trie..."))
+        var lineNumber = 0
         while let line = wordStream?.nextLine() {
           // No dictionary words shorter than 3.
           if line.characters.count > 2 {
             trie.insert(word: line)
           }
+          
+          lineNumber += 1
+          messages.onNext(.message("Reading trie...\(lineNumber)"))
         }
+        messages.onNext(.message("Searching..."))
 
-        let myboard = Board(rows: 5, cols: 6, contents: "...............r...m.wa..foeig.alrre")
+        let myboard = Board(rows: 6, cols: 6, contents: "............n.....in..ipacipcrteuome")
         Swift.print("WORDS")
         myboard.searchAll(in: trie) { word in
           if word.characters.count >= 6 { Swift.print(word) }
         }
+        
+        messages.onNext(.none)
 
         return trie
       }
