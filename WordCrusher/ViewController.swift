@@ -14,7 +14,6 @@ import StreamReader
 let boardRows = 6
 let boardCols = 6
 let boardContents = "............n.....in..ipacipcrteuome"
-let minWordLength = 5
 
 class ViewController: NSViewController {
   let disposeBag = DisposeBag()
@@ -25,6 +24,13 @@ class ViewController: NSViewController {
   var statusViewModel: StatusViewModel!
   let wordLength = BehaviorSubject<MatchSpec<Int>>(value: .all)
   let status = PublishSubject<Status>()
+  
+  weak var tableView: NSTableView!
+  var wordList: [String] = [] {
+    didSet {
+      tableView.reloadData()
+    }
+  }
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -42,7 +48,8 @@ class ViewController: NSViewController {
     let statusView = makeStatusView()
     view.addSubview(statusView)
     
-    let wordList = makeWordList()
+    let (wordList, wordTable) = makeWordList()
+    self.tableView = wordTable
     view.addSubview(wordList)
 
     constrainViews(boardView: boardView,
@@ -61,10 +68,11 @@ class ViewController: NSViewController {
     searchService.words
       .map {
         // Remove dups by making a set first, then sort.
-        return Array(Set($0.filter { $0.characters.count >= minWordLength })).sorted()
+        return Array(Set($0)).sorted()
       }
+      .observeOn(MainScheduler.instance)
       .subscribe(onNext: { words in
-        print(words)
+        self.wordList = words
       })
       .disposed(by: disposeBag)
 
@@ -72,10 +80,24 @@ class ViewController: NSViewController {
     boardView.becomeFirstResponder()
   }
   
-  private func makeWordList() -> NSTableView {
-    let wordList = NSTableView()
-    wordList.translatesAutoresizingMaskIntoConstraints = false
-    return wordList
+  private func makeWordList() -> (NSScrollView, NSTableView) {
+    let scrollView = NSScrollView()
+    scrollView.translatesAutoresizingMaskIntoConstraints = false
+    
+    let tableView = NSTableView()
+    tableView.headerView = nil
+    let col1 = NSTableColumn(identifier: "word")
+    col1.title = "Matching words"
+    tableView.addTableColumn(col1)
+    
+    // Both of these need to be moved somewhere more reactive.
+    tableView.dataSource = self
+//    tableView.delegate = self
+    
+    scrollView.documentView = tableView
+    scrollView.hasVerticalScroller = true
+    
+    return (scrollView, tableView)
   }
   
   private func makeWordLengthControl() -> NSSegmentedControl {
@@ -125,7 +147,7 @@ class ViewController: NSViewController {
   private func constrainViews(boardView: BoardView,
                               statusView: NSTextField,
                               wordLengthControl: NSSegmentedControl,
-                              wordList: NSTableView) {
+                              wordList: NSScrollView) {
     wordLengthControl.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
     wordLengthControl.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
     
@@ -141,7 +163,6 @@ class ViewController: NSViewController {
     
     wordList.topAnchor.constraint(equalTo: wordLengthControl.bottomAnchor).isActive = true
     wordList.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-//    wordList.heightAnchor.constraint(equalToConstant: 200).isActive = true
     wordList.widthAnchor.constraint(equalToConstant: 150).isActive = true
     wordList.bottomAnchor.constraint(equalTo: statusView.topAnchor).isActive = true
   }
@@ -163,10 +184,15 @@ class ViewController: NSViewController {
       status.onNext(.message("All words"))
     }
   }
+}
 
-  override var representedObject: Any? {
-    didSet {
-      // Update the view, if already loaded.
-    }
+extension ViewController : NSTableViewDataSource {
+  public func numberOfRows(in tableView: NSTableView) -> Int {
+  return wordList.count
   }
+  
+  public func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
+    return wordList[row]
+  }
+  
 }
