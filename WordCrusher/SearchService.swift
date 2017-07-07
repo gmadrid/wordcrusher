@@ -10,21 +10,13 @@ import Foundation
 import RxSwift
 
 class SearchService {
-  let disposeBag = DisposeBag()
-  
   // Outputs
   let words: Observable<[String]>
-  
-  init(boardChanged: Observable<()>, trie: Observable<Trie>) {
-    let wordsSubject = BehaviorSubject<[String]>(value: [String]())
-    words = wordsSubject.asObservable()
-    
-    Observable.combineLatest(boardChanged.startWith(()), trie) { ($0, $1) }
-      .map { _, trie -> () in
-        return ()
-      }
-      .subscribe(onNext: {
-      })
-      .disposed(by: disposeBag)
+
+  init(board: Board, boardChanged: Observable<()>, trie: Observable<Trie>) {
+    words = Observable.combineLatest(boardChanged.startWith(()), trie) { $1 }
+      .map { board.searchAll(in: $0) }
+      .startWith([String]())
+      .shareReplay(1)
   }
 }

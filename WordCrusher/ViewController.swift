@@ -11,6 +11,11 @@ import RxCocoa
 import RxSwift
 import StreamReader
 
+let boardRows = 6
+let boardCols = 6
+let boardContents = "............n.....in..ipacipcrteuome"
+let minWordLength = 5
+
 class ViewController: NSViewController {
   let disposeBag = DisposeBag()
 
@@ -21,28 +26,39 @@ class ViewController: NSViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    
+
     // Start this as soon as possible.
     trieService = TrieService()
-    
-    let board = Board(rows: 6, cols: 6, contents: "............n.....in..ipacipcrteuome")
+
+    let board = Board(rows: boardRows, cols: boardCols, contents: boardContents)
     let boardView = makeBoardView(board: board)
     view.addSubview(boardView)
-    
+
     let statusView = makeStatusView()
     view.addSubview(statusView)
-    
+
     constrainViews(boardView: boardView, statusView: statusView)
-    
+
     let statusQueue = trieService.status
     boardViewModel = makeBoardViewModel(board: board, boardView: boardView)
     statusViewModel = makeStatusViewModel(statusQueue: statusQueue, statusView: statusView)
-    searchService = SearchService(boardChanged: boardViewModel.boardChanged, trie: trieService.trie)
+    searchService = SearchService(board: board,
+                                  boardChanged: boardViewModel.boardChanged,
+                                  trie: trieService.trie)
+
+    searchService.words
+      .map {
+        return $0.filter { $0.characters.count >= minWordLength }.sorted()
+      }
+      .subscribe(onNext: { words in
+        print(words)
+      })
+      .disposed(by: disposeBag)
 
     boardViewModel.activeCell.onNext(CellIndex(row: 0, col: 0))
     boardView.becomeFirstResponder()
   }
-  
+
   private func makeBoardView(board: Board) -> BoardView {
     let boardView = BoardView()
     boardView.translatesAutoresizingMaskIntoConstraints = false

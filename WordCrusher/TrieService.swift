@@ -15,23 +15,23 @@ private let defaultWordList = "/usr/share/dict/words"
 
 class TrieService {
   let disposeBag = DisposeBag()
-  
+
   // Output
   let trie: Observable<Trie>
   let status: Observable<Status>
-  
+
   init() {
     let statusSubject = PublishSubject<Status>()
-    self.status = statusSubject.asObservable()
-    
+    status = statusSubject.asObservable()
+
     let trieSubject = PublishSubject<Trie>()
-    self.trie = trieSubject.asObservable()
-    
+    trie = trieSubject.asObservable()
+
     Observable.just(defaultWordList)
       .map { (path: String) -> Trie in
         let trie = Trie()
         let wordStream = StreamReader(path: path)!
-        
+
         // TODO: error
         statusSubject.onNext(.message("Reading word list..."))
         var lineNumber = 0
