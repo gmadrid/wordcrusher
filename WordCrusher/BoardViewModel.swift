@@ -32,6 +32,7 @@ class BoardViewModel {
     let boardChanged = PublishSubject<()>()
     self.boardChanged = boardChanged.asObservable()
 
+    // TODO: see if you can get this subscription out of here. I bet you can.
     charInput.withLatestFrom(activeCell) { $0 }
       .subscribe(onNext: { [weak self] pair in
         let (ch, activeCell_) = pair
