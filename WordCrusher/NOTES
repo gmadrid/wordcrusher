@@ -1,7 +1,5 @@
 Stuff to add:
-- display the word list
 - double click to drop grid above
 - hide status bar when no status
 - resize grid to fit
-- figure out why click targets are broken
 - allow movement around grid with arrows

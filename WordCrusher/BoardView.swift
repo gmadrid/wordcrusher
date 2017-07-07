@@ -220,10 +220,12 @@ extension BoardView {
   }
 
   public override func mouseMoved(with event: NSEvent) {
-    hoverCell = cellContainingPoint(event.locationInWindow)
+    let location = convert(event.locationInWindow, from: nil)
+    hoverCell = cellContainingPoint(location)
   }
 
   public override func mouseDown(with event: NSEvent) {
-    activeCell = cellContainingPoint(event.locationInWindow)
+    let location = convert(event.locationInWindow, from: nil)
+    activeCell = cellContainingPoint(location)
   }
 }
