@@ -28,6 +28,7 @@
 		C7EFEEAF1EF97E2E008D2F78 /* TrieTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7EFEEAE1EF97E2E008D2F78 /* TrieTest.swift */; };
 		C7EFEEB11EF9D06E008D2F78 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7EFEEB01EF9D06E008D2F78 /* Board.swift */; };
 		C7EFEEB31EF9D317008D2F78 /* BoardTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7EFEEB21EF9D317008D2F78 /* BoardTest.swift */; };
+		C7FD61561F1025480069C041 /* WordListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FD61551F1025480069C041 /* WordListViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,7 @@
 		C7EFEEAE1EF97E2E008D2F78 /* TrieTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrieTest.swift; sourceTree = "<group>"; };
 		C7EFEEB01EF9D06E008D2F78 /* Board.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
 		C7EFEEB21EF9D317008D2F78 /* BoardTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardTest.swift; sourceTree = "<group>"; };
+		C7FD61551F1025480069C041 /* WordListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WordListViewModel.swift; sourceTree = "<group>"; };
 		CB4BFDD29BFCED4E0E0A7698 /* Pods-WordCrusherTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WordCrusherTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-WordCrusherTests/Pods-WordCrusherTests.release.xcconfig"; sourceTree = "<group>"; };
 		EF09A1FFCDFD91A842B8BD4D /* Pods-WordCrusher.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WordCrusher.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WordCrusher/Pods-WordCrusher.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -137,6 +139,7 @@
 			children = (
 				C7220C481F0FDBF5004401D2 /* NOTES */,
 				C7D597ED1F0F33FB00CEBA22 /* Services */,
+				C7FD61541F1024960069C041 /* WordList */,
 				C7287A4A1F0E928B002D2473 /* Status */,
 				C7A4E1261F0565E600511999 /* Board */,
 				C756C5C91EFD4CCC002E0E73 /* Errs.swift */,
@@ -188,6 +191,14 @@
 				C7220C4A1F1004A8004401D2 /* MatchSpec.swift */,
 			);
 			name = "Data Structures";
+			sourceTree = "<group>";
+		};
+		C7FD61541F1024960069C041 /* WordList */ = {
+			isa = PBXGroup;
+			children = (
+				C7FD61551F1025480069C041 /* WordListViewModel.swift */,
+			);
+			name = WordList;
 			sourceTree = "<group>";
 		};
 		DCEAB746EEA7112CCFF101C1 /* Frameworks */ = {
@@ -405,6 +416,7 @@
 				C756C5CA1EFD4CCC002E0E73 /* Errs.swift in Sources */,
 				C7220C4B1F1004A8004401D2 /* MatchSpec.swift in Sources */,
 				C7287A4C1F0E92E2002D2473 /* Status.swift in Sources */,
+				C7FD61561F1025480069C041 /* WordListViewModel.swift in Sources */,
 				C7EFEEAD1EF97AD1008D2F78 /* Trie.swift in Sources */,
 				C775A6C31EFEABB3009B61FE /* BoardView+Rx.swift in Sources */,
 				C782CC941EF97830003E6E49 /* ViewController.swift in Sources */,

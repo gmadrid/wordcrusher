@@ -22,6 +22,7 @@ class ViewController: NSViewController {
   var trieService: TrieService!
   var boardViewModel: BoardViewModel!
   var statusViewModel: StatusViewModel!
+  var wordListViewModel: WordListViewModel!
   let wordLength = BehaviorSubject<MatchSpec<Int>>(value: .all)
   let status = PublishSubject<Status>()
   
@@ -64,14 +65,12 @@ class ViewController: NSViewController {
                                   boardChanged: boardViewModel.boardChanged,
                                   trie: trieService.trie,
                                   wordLength: wordLength.asObservable())
-
-    searchService.words
-      .map {
-        // Remove dups by making a set first, then sort.
-        Array(Set($0)).sorted()
-      }
+    wordListViewModel = WordListViewModel(wordList: searchService.words)
+    wordTable.dataSource = wordListViewModel
+    
+    wordListViewModel.wordListChanged
       .observeOn(MainScheduler.instance)
-      .subscribe(onNext: { self.wordList = $0 })
+      .subscribe(onNext: { [weak self] _ in self?.tableView.reloadData() })
       .disposed(by: disposeBag)
 
     boardViewModel.activeCell.onNext(CellIndex(row: 0, col: 0))
@@ -87,10 +86,6 @@ class ViewController: NSViewController {
     let col1 = NSTableColumn(identifier: "word")
     col1.title = "Matching words"
     tableView.addTableColumn(col1)
-    
-    // Both of these need to be moved somewhere more reactive.
-    tableView.dataSource = self
-//    tableView.delegate = self
     
     scrollView.documentView = tableView
     scrollView.hasVerticalScroller = true
@@ -182,15 +177,4 @@ class ViewController: NSViewController {
       status.onNext(.message("All words"))
     }
   }
-}
-
-extension ViewController : NSTableViewDataSource {
-  public func numberOfRows(in tableView: NSTableView) -> Int {
-  return wordList.count
-  }
-  
-  public func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
-    return wordList[row]
-  }
-  
 }
