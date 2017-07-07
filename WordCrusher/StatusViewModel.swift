@@ -11,25 +11,12 @@ import RxCocoa
 import RxSwift
 
 class StatusViewModel {
-  let disposeBag = DisposeBag()
-  let status = Status.none
-
-  // Inputs
-  let messages: Observable<Status>
-
   // Outputs:
   let text: Observable<String?>
 
   init(messages: Observable<Status>) {
-    self.messages = messages
-
-    let textSubject = PublishSubject<String?>()
-    text = textSubject
-
-    messages.throttle(0.25, scheduler: MainScheduler.asyncInstance)
-      .subscribe(onNext: { st in
-        textSubject.onNext(st.msg())
-      })
-      .disposed(by: disposeBag)
+      text = messages
+        .throttle(0.25, scheduler: MainScheduler.asyncInstance)
+        .map { $0.msg() }
   }
 }
