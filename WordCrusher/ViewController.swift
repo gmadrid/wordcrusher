@@ -68,12 +68,10 @@ class ViewController: NSViewController {
     searchService.words
       .map {
         // Remove dups by making a set first, then sort.
-        return Array(Set($0)).sorted()
+        Array(Set($0)).sorted()
       }
       .observeOn(MainScheduler.instance)
-      .subscribe(onNext: { words in
-        self.wordList = words
-      })
+      .subscribe(onNext: { self.wordList = $0 })
       .disposed(by: disposeBag)
 
     boardViewModel.activeCell.onNext(CellIndex(row: 0, col: 0))
@@ -163,7 +161,7 @@ class ViewController: NSViewController {
     
     wordList.topAnchor.constraint(equalTo: wordLengthControl.bottomAnchor).isActive = true
     wordList.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-    wordList.widthAnchor.constraint(equalToConstant: 150).isActive = true
+    wordList.widthAnchor.constraint(equalToConstant: 100).isActive = true
     wordList.bottomAnchor.constraint(equalTo: statusView.topAnchor).isActive = true
   }
 
