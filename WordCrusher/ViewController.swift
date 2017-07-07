@@ -14,9 +14,35 @@ import StreamReader
 class ViewController: NSViewController {
   let disposeBag = DisposeBag()
 
+  var searchService: SearchService!
+  var trieService: TrieService!
   var boardViewModel: BoardViewModel!
   var statusViewModel: StatusViewModel!
 
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    
+    // Start this as soon as possible.
+    trieService = TrieService()
+    
+    let board = Board(rows: 6, cols: 6, contents: "............n.....in..ipacipcrteuome")
+    let boardView = makeBoardView(board: board)
+    view.addSubview(boardView)
+    
+    let statusView = makeStatusView()
+    view.addSubview(statusView)
+    
+    constrainViews(boardView: boardView, statusView: statusView)
+    
+    let statusQueue = trieService.status
+    boardViewModel = makeBoardViewModel(board: board, boardView: boardView)
+    statusViewModel = makeStatusViewModel(statusQueue: statusQueue, statusView: statusView)
+    searchService = SearchService(boardChanged: boardViewModel.boardChanged, trie: trieService.trie)
+
+    boardViewModel.activeCell.onNext(CellIndex(row: 0, col: 0))
+    boardView.becomeFirstResponder()
+  }
+  
   private func makeBoardView(board: Board) -> BoardView {
     let boardView = BoardView()
     boardView.translatesAutoresizingMaskIntoConstraints = false
@@ -62,78 +88,6 @@ class ViewController: NSViewController {
     statusView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
 
     boardView.bottomAnchor.constraint(equalTo: statusView.topAnchor).isActive = true
-  }
-
-  override func viewDidLoad() {
-    super.viewDidLoad()
-
-    //    let board = Board(rows: 5, cols: 6, contents: "abcdefghijklmnopqrstuvwxyz")
-    let board = Board(rows: 6, cols: 6, contents: "............n.....in..ipacipcrteuome")
-    let boardView = makeBoardView(board: board)
-    view.addSubview(boardView)
-
-    let statusView = makeStatusView()
-    view.addSubview(statusView)
-
-    constrainViews(boardView: boardView, statusView: statusView)
-
-    let messages = PublishSubject<Status>()
-    boardViewModel = makeBoardViewModel(board: board, boardView: boardView)
-    statusViewModel = makeStatusViewModel(statusQueue: messages, statusView: statusView)
-
-    _ = Observable.just("/usr/share/dict/words")
-      .map { path -> Trie in
-        let trie = Trie()
-        let wordStream = StreamReader(path: path)
-        // TODO: error
-        messages.onNext(.message("Reading trie..."))
-        var lineNumber = 0
-        while let line = wordStream?.nextLine() {
-          // No dictionary words shorter than 3.
-          if line.characters.count > 2 {
-            trie.insert(word: line)
-          }
-
-          lineNumber += 1
-          messages.onNext(.message("Reading trie...\(lineNumber)"))
-        }
-        messages.onNext(.message("Searching..."))
-
-        Swift.print("WORDS")
-        board.searchAll(in: trie) { word in
-          if word.characters.count >= 6 { Swift.print(word) }
-        }
-
-        messages.onNext(.none)
-
-        return trie
-      }
-      .shareReplay(1)
-      .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
-      .asDriver(onErrorJustReturn: Trie())
-      .drive(onNext: { _ in })
-
-    //    print("Loading dict")
-    //    let wordsStream = StreamReader(path: "/usr/share/dict/words")
-    //    let trie = Trie()
-    //    while let line = wordsStream?.nextLine() {
-    //      // No dictionary words shorter than 3.
-    //      if line.characters.count > 2 {
-    //        trie.insert(word: line)
-    //      }
-    //    }
-    //    print("Done loading dict")
-    //
-    //    let startBoard = "essayrtmaxnovelagilcisedchtory"
-    //    let afterEssayNovel = "rtmaxagilcisedyhtory.........."
-    //    let afterClimax = "rtedyagoryis...ht............."
-    //    let afterTragedy = "isoryht......................."
-    //    let board = try! Board(rows: 6, cols: 5, contents: afterTragedy)
-    //    board.searchAll(in: trie) { word in
-    //      print(word)
-    //    }
-
-    boardView.becomeFirstResponder()
   }
 
   override func keyDown(with event: NSEvent) {

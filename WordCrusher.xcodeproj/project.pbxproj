@@ -20,6 +20,8 @@
 		C782CC991EF97830003E6E49 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C782CC971EF97830003E6E49 /* Main.storyboard */; };
 		C79B511C1EFC159C00BFA96B /* BoardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79B511B1EFC159C00BFA96B /* BoardViewModel.swift */; };
 		C7B3EA391EFB69A3000B1BDE /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B3EA381EFB69A3000B1BDE /* BoardView.swift */; };
+		C7D597EC1F0F241D00CEBA22 /* TrieService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D597EB1F0F241D00CEBA22 /* TrieService.swift */; };
+		C7D597EF1F0F340E00CEBA22 /* SearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D597EE1F0F340E00CEBA22 /* SearchService.swift */; };
 		C7EFEEAD1EF97AD1008D2F78 /* Trie.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7EFEEAC1EF97AD1008D2F78 /* Trie.swift */; };
 		C7EFEEAF1EF97E2E008D2F78 /* TrieTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7EFEEAE1EF97E2E008D2F78 /* TrieTest.swift */; };
 		C7EFEEB11EF9D06E008D2F78 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7EFEEB01EF9D06E008D2F78 /* Board.swift */; };
@@ -54,6 +56,8 @@
 		C782CC9A1EF97830003E6E49 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C79B511B1EFC159C00BFA96B /* BoardViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardViewModel.swift; sourceTree = "<group>"; };
 		C7B3EA381EFB69A3000B1BDE /* BoardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
+		C7D597EB1F0F241D00CEBA22 /* TrieService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrieService.swift; sourceTree = "<group>"; };
+		C7D597EE1F0F340E00CEBA22 /* SearchService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchService.swift; sourceTree = "<group>"; };
 		C7EFEEA11EF97A42008D2F78 /* WordCrusherTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WordCrusherTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7EFEEA51EF97A42008D2F78 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C7EFEEAC1EF97AD1008D2F78 /* Trie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Trie.swift; sourceTree = "<group>"; };
@@ -127,6 +131,7 @@
 		C782CC901EF97830003E6E49 /* WordCrusher */ = {
 			isa = PBXGroup;
 			children = (
+				C7D597ED1F0F33FB00CEBA22 /* Services */,
 				C7287A4A1F0E928B002D2473 /* Status */,
 				C7A4E1261F0565E600511999 /* Board */,
 				C756C5C91EFD4CCC002E0E73 /* Errs.swift */,
@@ -150,6 +155,15 @@
 				C775A6C21EFEABB3009B61FE /* BoardView+Rx.swift */,
 			);
 			name = Board;
+			sourceTree = "<group>";
+		};
+		C7D597ED1F0F33FB00CEBA22 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				C7D597EB1F0F241D00CEBA22 /* TrieService.swift */,
+				C7D597EE1F0F340E00CEBA22 /* SearchService.swift */,
+			);
+			name = Services;
 			sourceTree = "<group>";
 		};
 		C7EFEEA21EF97A42008D2F78 /* WordCrusherTests */ = {
@@ -380,11 +394,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C7D597EF1F0F340E00CEBA22 /* SearchService.swift in Sources */,
 				C756C5CA1EFD4CCC002E0E73 /* Errs.swift in Sources */,
 				C7287A4C1F0E92E2002D2473 /* Status.swift in Sources */,
 				C7EFEEAD1EF97AD1008D2F78 /* Trie.swift in Sources */,
 				C775A6C31EFEABB3009B61FE /* BoardView+Rx.swift in Sources */,
 				C782CC941EF97830003E6E49 /* ViewController.swift in Sources */,
+				C7D597EC1F0F241D00CEBA22 /* TrieService.swift in Sources */,
 				C72F3D9D1EFE0DD7003C3DFE /* Util.swift in Sources */,
 				C7B3EA391EFB69A3000B1BDE /* BoardView.swift in Sources */,
 				C7287A4E1F0E9327002D2473 /* StatusViewModel.swift in Sources */,
