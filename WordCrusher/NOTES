@@ -1,4 +1,6 @@
 Stuff to add:
+- display the word list
+- have selectors to choose word length
 - hide status bar when no status
 - resize grid to fit
 - figure out why click targets are broken

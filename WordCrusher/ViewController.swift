@@ -36,17 +36,16 @@ class ViewController: NSViewController {
     let boardView = makeBoardView(board: board)
     view.addSubview(boardView)
     
-    let button = makeButton()
-    view.addSubview(button)
+    let wordLengthControl = makeWordLengthControl()
+    view.addSubview(wordLengthControl)
 
     let statusView = makeStatusView()
     view.addSubview(statusView)
 
-    constrainViews(boardView: boardView, statusView: statusView)
+    constrainViews(boardView: boardView,
+                   statusView: statusView,
+                   wordLengthControl: wordLengthControl)
     
-    button.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-    button.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-
     let statusQueue = Observable.merge(trieService.status, status)
     boardViewModel = makeBoardViewModel(board: board, boardView: boardView)
     statusViewModel = makeStatusViewModel(statusQueue: statusQueue, statusView: statusView)
@@ -67,6 +66,13 @@ class ViewController: NSViewController {
 
     boardViewModel.activeCell.onNext(CellIndex(row: 0, col: 0))
     boardView.becomeFirstResponder()
+  }
+  
+  private func makeWordLengthControl() -> NSSegmentedControl {
+    let labels = ["?", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12+"]
+    let control = NSSegmentedControl(labels: labels, trackingMode: .selectOne, target: self, action: #selector(wordLengthChosen(thing:)))
+    control.translatesAutoresizingMaskIntoConstraints = false
+    return control
   }
   
   private func makeButton() -> NSButton {
@@ -104,6 +110,7 @@ class ViewController: NSViewController {
     let statusView = NSTextField(frame: CGRect.zero)
     statusView.translatesAutoresizingMaskIntoConstraints = false
     statusView.backgroundColor = NSColor.clear
+    statusView.isEditable = false
     return statusView
   }
 
@@ -113,8 +120,13 @@ class ViewController: NSViewController {
     return statusViewModel
   }
 
-  private func constrainViews(boardView: BoardView, statusView: NSTextField) {
-    boardView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+  private func constrainViews(boardView: BoardView,
+                              statusView: NSTextField,
+                              wordLengthControl: NSSegmentedControl) {
+    wordLengthControl.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+    wordLengthControl.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+    
+    boardView.topAnchor.constraint(equalTo: wordLengthControl.bottomAnchor).isActive = true
     boardView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
     boardView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
 
@@ -137,6 +149,15 @@ class ViewController: NSViewController {
     }
     status.onNext(.message("Only words with \(wl) letters"))
     wordLength.onNext(wl)
+  }
+  
+  @objc public func wordLengthChosen(thing: Any?) {
+    guard let control = thing as? NSSegmentedControl else { return }
+    guard let label = control.label(forSegment: control.selectedSegment) else { return }
+    
+    guard let wl = Int(label) else { return }
+    wordLength.onNext(wl)
+    status.onNext(.message("Only words with \(wl) letters"))
   }
 
   override var representedObject: Any? {
