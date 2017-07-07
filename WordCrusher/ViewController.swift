@@ -41,10 +41,14 @@ class ViewController: NSViewController {
 
     let statusView = makeStatusView()
     view.addSubview(statusView)
+    
+    let wordList = makeWordList()
+    view.addSubview(wordList)
 
     constrainViews(boardView: boardView,
                    statusView: statusView,
-                   wordLengthControl: wordLengthControl)
+                   wordLengthControl: wordLengthControl,
+                   wordList: wordList)
     
     let statusQueue = Observable.merge(trieService.status, status)
     boardViewModel = makeBoardViewModel(board: board, boardView: boardView)
@@ -66,6 +70,12 @@ class ViewController: NSViewController {
 
     boardViewModel.activeCell.onNext(CellIndex(row: 0, col: 0))
     boardView.becomeFirstResponder()
+  }
+  
+  private func makeWordList() -> NSTableView {
+    let wordList = NSTableView()
+    wordList.translatesAutoresizingMaskIntoConstraints = false
+    return wordList
   }
   
   private func makeWordLengthControl() -> NSSegmentedControl {
@@ -114,7 +124,8 @@ class ViewController: NSViewController {
 
   private func constrainViews(boardView: BoardView,
                               statusView: NSTextField,
-                              wordLengthControl: NSSegmentedControl) {
+                              wordLengthControl: NSSegmentedControl,
+                              wordList: NSTableView) {
     wordLengthControl.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
     wordLengthControl.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
     
@@ -127,6 +138,12 @@ class ViewController: NSViewController {
     statusView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
 
     boardView.bottomAnchor.constraint(equalTo: statusView.topAnchor).isActive = true
+    
+    wordList.topAnchor.constraint(equalTo: wordLengthControl.bottomAnchor).isActive = true
+    wordList.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+//    wordList.heightAnchor.constraint(equalToConstant: 200).isActive = true
+    wordList.widthAnchor.constraint(equalToConstant: 150).isActive = true
+    wordList.bottomAnchor.constraint(equalTo: statusView.topAnchor).isActive = true
   }
 
   override func keyDown(with event: NSEvent) {
