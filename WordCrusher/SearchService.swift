@@ -13,9 +13,14 @@ class SearchService {
   // Outputs
   let words: Observable<[String]>
 
-  init(board: Board, boardChanged: Observable<()>, trie: Observable<Trie>) {
-    words = Observable.combineLatest(boardChanged.startWith(()), trie) { $1 }
-      .map { board.searchAll(in: $0) }
+  init(board: Board,
+       boardChanged: Observable<()>,
+       trie: Observable<Trie>,
+       wordLength: Observable<Int>) {
+    words = Observable.combineLatest(boardChanged.startWith(()), trie, wordLength) { ($1, $2) }
+      .map { (trie, wordLength) in
+        return board.searchAll(in: trie).filter { s in s.characters.count == wordLength }
+      }
       .startWith([String]())
       .shareReplay(1)
   }

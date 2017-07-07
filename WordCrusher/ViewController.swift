@@ -23,6 +23,8 @@ class ViewController: NSViewController {
   var trieService: TrieService!
   var boardViewModel: BoardViewModel!
   var statusViewModel: StatusViewModel!
+  let wordLength = BehaviorSubject<Int>(value: 5)
+  let status = PublishSubject<Status>()
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -33,22 +35,30 @@ class ViewController: NSViewController {
     let board = Board(rows: boardRows, cols: boardCols, contents: boardContents)
     let boardView = makeBoardView(board: board)
     view.addSubview(boardView)
+    
+    let button = makeButton()
+    view.addSubview(button)
 
     let statusView = makeStatusView()
     view.addSubview(statusView)
 
     constrainViews(boardView: boardView, statusView: statusView)
+    
+    button.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+    button.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
 
-    let statusQueue = trieService.status
+    let statusQueue = Observable.merge(trieService.status, status)
     boardViewModel = makeBoardViewModel(board: board, boardView: boardView)
     statusViewModel = makeStatusViewModel(statusQueue: statusQueue, statusView: statusView)
     searchService = SearchService(board: board,
                                   boardChanged: boardViewModel.boardChanged,
-                                  trie: trieService.trie)
+                                  trie: trieService.trie,
+                                  wordLength: wordLength.asObservable())
 
     searchService.words
       .map {
-        return $0.filter { $0.characters.count >= minWordLength }.sorted()
+        // Remove dups by making a set first, then sort.
+        return Array(Set($0.filter { $0.characters.count >= minWordLength })).sorted()
       }
       .subscribe(onNext: { words in
         print(words)
@@ -57,6 +67,15 @@ class ViewController: NSViewController {
 
     boardViewModel.activeCell.onNext(CellIndex(row: 0, col: 0))
     boardView.becomeFirstResponder()
+  }
+  
+  private func makeButton() -> NSButton {
+    let button = NSButton()
+    button.stringValue = "Click"
+    button.target = self
+    button.action = #selector(buttonTapped(_:))
+    button.translatesAutoresizingMaskIntoConstraints = false
+    return button
   }
 
   private func makeBoardView(board: Board) -> BoardView {
@@ -111,7 +130,13 @@ class ViewController: NSViewController {
     super.keyDown(with: event)
   }
 
-  func buttonTapped(_: Any?) {
+  @objc public func buttonTapped(_: Any?) {
+    var wl = try! wordLength.value() + 1
+    if wl > 12 {
+      wl = 3
+    }
+    status.onNext(.message("Only words with \(wl) letters"))
+    wordLength.onNext(wl)
   }
 
   override var representedObject: Any? {
