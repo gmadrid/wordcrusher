@@ -23,7 +23,7 @@ class ViewController: NSViewController {
   var trieService: TrieService!
   var boardViewModel: BoardViewModel!
   var statusViewModel: StatusViewModel!
-  let wordLength = BehaviorSubject<Int>(value: 5)
+  let wordLength = BehaviorSubject<MatchSpec<Int>>(value: .all)
   let status = PublishSubject<Status>()
 
   override func viewDidLoad() {
@@ -69,21 +69,13 @@ class ViewController: NSViewController {
   }
   
   private func makeWordLengthControl() -> NSSegmentedControl {
-    let labels = ["?", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12+"]
+    let labels = ["?", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
     let control = NSSegmentedControl(labels: labels, trackingMode: .selectOne, target: self, action: #selector(wordLengthChosen(thing:)))
+    control.selectedSegment = 0
     control.translatesAutoresizingMaskIntoConstraints = false
     return control
   }
   
-  private func makeButton() -> NSButton {
-    let button = NSButton()
-    button.stringValue = "Click"
-    button.target = self
-    button.action = #selector(buttonTapped(_:))
-    button.translatesAutoresizingMaskIntoConstraints = false
-    return button
-  }
-
   private func makeBoardView(board: Board) -> BoardView {
     let boardView = BoardView()
     boardView.translatesAutoresizingMaskIntoConstraints = false
@@ -142,22 +134,17 @@ class ViewController: NSViewController {
     super.keyDown(with: event)
   }
 
-  @objc public func buttonTapped(_: Any?) {
-    var wl = try! wordLength.value() + 1
-    if wl > 12 {
-      wl = 3
-    }
-    status.onNext(.message("Only words with \(wl) letters"))
-    wordLength.onNext(wl)
-  }
-  
   @objc public func wordLengthChosen(thing: Any?) {
     guard let control = thing as? NSSegmentedControl else { return }
     guard let label = control.label(forSegment: control.selectedSegment) else { return }
     
-    guard let wl = Int(label) else { return }
-    wordLength.onNext(wl)
-    status.onNext(.message("Only words with \(wl) letters"))
+    if let wl = Int(label) {
+      wordLength.onNext(.equal(rhs: wl))
+      status.onNext(.message("Only words with \(wl) letters"))
+    } else {
+      wordLength.onNext(.all)
+      status.onNext(.message("All words"))
+    }
   }
 
   override var representedObject: Any? {

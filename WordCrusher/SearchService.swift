@@ -16,10 +16,10 @@ class SearchService {
   init(board: Board,
        boardChanged: Observable<()>,
        trie: Observable<Trie>,
-       wordLength: Observable<Int>) {
+       wordLength: Observable<MatchSpec<Int>>) {
     words = Observable.combineLatest(boardChanged.startWith(()), trie, wordLength) { ($1, $2) }
       .map { (trie, wordLength) in
-        return board.searchAll(in: trie).filter { s in s.characters.count == wordLength }
+        return board.searchAll(in: trie).filter { s in wordLength.matches(lhs: s.characters.count) }
       }
       .startWith([String]())
       .shareReplay(1)

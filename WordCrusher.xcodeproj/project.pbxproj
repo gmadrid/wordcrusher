@@ -10,6 +10,7 @@
 		6F1E0EEA1E9F2B1215A39FCF /* Pods_WordCrusher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30F6AF43F9EEBD1A886F7ABE /* Pods_WordCrusher.framework */; };
 		B98387D1A9BEA563911B3A69 /* Pods_WordCrusherTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5166DBC4E3262AA92E07A7BE /* Pods_WordCrusherTests.framework */; };
 		C7220C491F0FDBF5004401D2 /* NOTES in Resources */ = {isa = PBXBuildFile; fileRef = C7220C481F0FDBF5004401D2 /* NOTES */; };
+		C7220C4B1F1004A8004401D2 /* MatchSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7220C4A1F1004A8004401D2 /* MatchSpec.swift */; };
 		C7287A4C1F0E92E2002D2473 /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7287A4B1F0E92E2002D2473 /* Status.swift */; };
 		C7287A4E1F0E9327002D2473 /* StatusViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7287A4D1F0E9327002D2473 /* StatusViewModel.swift */; };
 		C72F3D9D1EFE0DD7003C3DFE /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = C72F3D9C1EFE0DD7003C3DFE /* Util.swift */; };
@@ -45,6 +46,7 @@
 		5166DBC4E3262AA92E07A7BE /* Pods_WordCrusherTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WordCrusherTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		757DC797BBEE95D1115569DA /* Pods-WordCrusherTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WordCrusherTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WordCrusherTests/Pods-WordCrusherTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C7220C481F0FDBF5004401D2 /* NOTES */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = NOTES; sourceTree = "<group>"; };
+		C7220C4A1F1004A8004401D2 /* MatchSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchSpec.swift; sourceTree = "<group>"; };
 		C7287A4B1F0E92E2002D2473 /* Status.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Status.swift; sourceTree = "<group>"; };
 		C7287A4D1F0E9327002D2473 /* StatusViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusViewModel.swift; sourceTree = "<group>"; };
 		C72F3D9C1EFE0DD7003C3DFE /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
@@ -183,6 +185,7 @@
 			isa = PBXGroup;
 			children = (
 				C7EFEEAC1EF97AD1008D2F78 /* Trie.swift */,
+				C7220C4A1F1004A8004401D2 /* MatchSpec.swift */,
 			);
 			name = "Data Structures";
 			sourceTree = "<group>";
@@ -400,6 +403,7 @@
 			files = (
 				C7D597EF1F0F340E00CEBA22 /* SearchService.swift in Sources */,
 				C756C5CA1EFD4CCC002E0E73 /* Errs.swift in Sources */,
+				C7220C4B1F1004A8004401D2 /* MatchSpec.swift in Sources */,
 				C7287A4C1F0E92E2002D2473 /* Status.swift in Sources */,
 				C7EFEEAD1EF97AD1008D2F78 /* Trie.swift in Sources */,
 				C775A6C31EFEABB3009B61FE /* BoardView+Rx.swift in Sources */,
