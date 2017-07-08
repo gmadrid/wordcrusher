@@ -10,9 +10,9 @@ import Foundation
 import RxSwift
 
 // Acts as a data source for a tableView, as well.
-class WordListViewModel : NSObject {
+class WordListViewModel: NSObject {
   let disposeBag = DisposeBag()
-  
+
   // Output
   let wordListChanged: Observable<()>
   fileprivate let wordListSubject = PublishSubject<()>()
@@ -22,13 +22,13 @@ class WordListViewModel : NSObject {
       wordListSubject.onNext(())
     }
   }
-  
+
   init(wordList: Observable<[String]>) {
     wordListChanged = wordListSubject
     self.wordList = []
-    
+
     super.init()
-    
+
     wordList
       .map {
         // Remove dups by making a set first, then sort.
@@ -37,15 +37,14 @@ class WordListViewModel : NSObject {
       .subscribe(onNext: { [weak self] lst in self?.wordList = lst })
       .disposed(by: disposeBag)
   }
-  
 }
 
-extension WordListViewModel : NSTableViewDataSource {
-  public func numberOfRows(in tableView: NSTableView) -> Int {
+extension WordListViewModel: NSTableViewDataSource {
+  public func numberOfRows(in _: NSTableView) -> Int {
     return wordList.count
   }
-  
-  public func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
+
+  public func tableView(_: NSTableView, objectValueFor _: NSTableColumn?, row: Int) -> Any? {
     return wordList[row]
-  }  
+  }
 }

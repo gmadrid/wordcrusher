@@ -229,7 +229,7 @@ extension BoardView {
   public override func mouseDown(with event: NSEvent) {
     let location = convert(event.locationInWindow, from: nil)
     let cell = cellContainingPoint(location)
-    
+
     delegate?.clickInCell?(row: cell?.row ?? -1, col: cell?.col ?? -1)
   }
 }

@@ -13,19 +13,19 @@ enum MatchSpec<T> where T: Comparable {
   case equal(rhs: T)
   case lessEq(rhs: T)
   case greaterEq(rhs: T)
-  
+
   func matches(lhs: T) -> Bool {
     switch self {
     case .all:
       return true
-      
-    case .equal(let rhs):
+
+    case let .equal(rhs):
       return lhs == rhs
-      
-    case .lessEq(let rhs):
+
+    case let .lessEq(rhs):
       return lhs <= rhs
-      
-    case .greaterEq(let rhs):
+
+    case let .greaterEq(rhs):
       return lhs >= rhs
     }
   }

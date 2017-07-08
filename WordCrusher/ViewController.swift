@@ -25,7 +25,7 @@ class ViewController: NSViewController {
   var wordListViewModel: WordListViewModel!
   let wordLength = BehaviorSubject<MatchSpec<Int>>(value: .all)
   let status = PublishSubject<Status>()
-  
+
   weak var tableView: NSTableView!
   var wordList: [String] = [] {
     didSet {
@@ -42,22 +42,22 @@ class ViewController: NSViewController {
     let board = Board(rows: boardRows, cols: boardCols, contents: boardContents)
     let boardView = makeBoardView(board: board)
     view.addSubview(boardView)
-    
+
     let wordLengthControl = makeWordLengthControl()
     view.addSubview(wordLengthControl)
 
     let statusView = makeStatusView()
     view.addSubview(statusView)
-    
+
     let (wordList, wordTable) = makeWordList()
-    self.tableView = wordTable
+    tableView = wordTable
     view.addSubview(wordList)
 
     constrainViews(boardView: boardView,
                    statusView: statusView,
                    wordLengthControl: wordLengthControl,
                    wordList: wordList)
-    
+
     let statusQueue = Observable.merge(trieService.status, status)
     boardViewModel = makeBoardViewModel(board: board, boardView: boardView)
     statusViewModel = makeStatusViewModel(statusQueue: statusQueue, statusView: statusView)
@@ -67,7 +67,7 @@ class ViewController: NSViewController {
                                   wordLength: wordLength.asObservable())
     wordListViewModel = WordListViewModel(wordList: searchService.words)
     wordTable.dataSource = wordListViewModel
-    
+
     wordListViewModel.wordListChanged
       .observeOn(MainScheduler.instance)
       .subscribe(onNext: { [weak self] _ in self?.tableView.reloadData() })
@@ -76,23 +76,23 @@ class ViewController: NSViewController {
     boardViewModel.activeCell.onNext(CellIndex(row: 0, col: 0))
     boardView.becomeFirstResponder()
   }
-  
+
   private func makeWordList() -> (NSScrollView, NSTableView) {
     let scrollView = NSScrollView()
     scrollView.translatesAutoresizingMaskIntoConstraints = false
-    
+
     let tableView = NSTableView()
     tableView.headerView = nil
     let col1 = NSTableColumn(identifier: "word")
     col1.title = "Matching words"
     tableView.addTableColumn(col1)
-    
+
     scrollView.documentView = tableView
     scrollView.hasVerticalScroller = true
-    
+
     return (scrollView, tableView)
   }
-  
+
   private func makeWordLengthControl() -> NSSegmentedControl {
     let labels = ["?", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
     let control = NSSegmentedControl(labels: labels, trackingMode: .selectOne, target: self, action: #selector(wordLengthChosen(thing:)))
@@ -100,7 +100,7 @@ class ViewController: NSViewController {
     control.translatesAutoresizingMaskIntoConstraints = false
     return control
   }
-  
+
   private func makeBoardView(board: Board) -> BoardView {
     let boardView = BoardView()
     boardView.translatesAutoresizingMaskIntoConstraints = false
@@ -144,7 +144,7 @@ class ViewController: NSViewController {
                               wordList: NSScrollView) {
     wordLengthControl.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
     wordLengthControl.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-    
+
     boardView.topAnchor.constraint(equalTo: wordLengthControl.bottomAnchor).isActive = true
     boardView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
     boardView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
@@ -154,7 +154,7 @@ class ViewController: NSViewController {
     statusView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
 
     boardView.bottomAnchor.constraint(equalTo: statusView.topAnchor).isActive = true
-    
+
     wordList.topAnchor.constraint(equalTo: wordLengthControl.bottomAnchor).isActive = true
     wordList.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
     wordList.widthAnchor.constraint(equalToConstant: 100).isActive = true
@@ -169,7 +169,7 @@ class ViewController: NSViewController {
   @objc public func wordLengthChosen(thing: Any?) {
     guard let control = thing as? NSSegmentedControl else { return }
     guard let label = control.label(forSegment: control.selectedSegment) else { return }
-    
+
     if let wl = Int(label) {
       wordLength.onNext(.equal(rhs: wl))
       status.onNext(.message("Only words with \(wl) letters"))

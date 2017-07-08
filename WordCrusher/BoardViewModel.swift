@@ -24,7 +24,7 @@ class BoardViewModel {
        clickedCell: Observable<CellIndex?>,
        charInput: Observable<Character>) {
     self.board = board
-    self.activeCell = activeCellProperty
+    activeCell = activeCellProperty
 
     let boardChanged = PublishSubject<()>()
     self.boardChanged = boardChanged.asObservable()
@@ -43,7 +43,7 @@ class BoardViewModel {
         boardChanged.onNext(())
       })
       .disposed(by: disposeBag)
-    
+
     clickedCell.distinctUntilChanged(==)
       .subscribe(onNext: { activeCellProperty.onNext($0) })
       .disposed(by: disposeBag)

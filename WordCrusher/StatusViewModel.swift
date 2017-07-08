@@ -15,8 +15,8 @@ class StatusViewModel {
   let text: Observable<String?>
 
   init(messages: Observable<Status>) {
-      text = messages
-        .throttle(0.25, scheduler: MainScheduler.asyncInstance)
-        .map { $0.msg() }
+    text = messages
+      .throttle(0.25, scheduler: MainScheduler.asyncInstance)
+      .map { $0.msg() }
   }
 }
