@@ -160,12 +160,7 @@ class ViewController: NSViewController {
     wordList.widthAnchor.constraint(equalToConstant: 100).isActive = true
     wordList.bottomAnchor.constraint(equalTo: statusView.topAnchor).isActive = true
   }
-
-  override func keyDown(with event: NSEvent) {
-    Swift.print(event)
-    super.keyDown(with: event)
-  }
-
+  
   @objc public func wordLengthChosen(thing: Any?) {
     guard let control = thing as? NSSegmentedControl else { return }
     guard let label = control.label(forSegment: control.selectedSegment) else { return }
