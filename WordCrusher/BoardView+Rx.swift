@@ -35,6 +35,12 @@ extension Reactive where Base: BoardView {
     let delegate = BoardViewDelegateProxy.proxyForObject(base)
     return ControlEvent(events: delegate.chSubject.asObservable())
   }
+  
+  /** Stream of mouse clicks translated into CellIndex? */
+  public var click: ControlEvent<CellIndex?> {
+    let delegate = BoardViewDelegateProxy.proxyForObject(base)
+    return ControlEvent(events: delegate.clickSubject.asObserver())
+  }
 }
 
 class BoardViewDelegateProxy: DelegateProxy, BoardViewDelegate, DelegateProxyType {
@@ -42,6 +48,7 @@ class BoardViewDelegateProxy: DelegateProxy, BoardViewDelegate, DelegateProxyTyp
 
   fileprivate let activeCellSubject = PublishSubject<CellIndex?>()
   fileprivate let chSubject = PublishSubject<Character>()
+  fileprivate let clickSubject = PublishSubject<CellIndex?>()
 
   public required init(parentObject: AnyObject) {
     boardView = castOrFatalError(parentObject)
@@ -57,15 +64,23 @@ class BoardViewDelegateProxy: DelegateProxy, BoardViewDelegate, DelegateProxyTyp
     let boardView: BoardView = castOrFatalError(object)
     boardView.delegate = delegate as? BoardViewDelegate
   }
-
+  
   public func activeCellChangedTo(row: Int, col: Int) {
-    let activeCell: CellIndex?
+    postCell(row: row, col: col, to: activeCellSubject)
+  }
+
+  public func clickInCell(row: Int, col: Int) {
+    postCell(row: row, col: col, to: clickSubject)
+  }
+  
+  public func postCell<O : ObserverType>(row: Int, col: Int, to sequence: O) where O.E == CellIndex? {
+    let cell: CellIndex?
     if row < 0 || col < 0 {
-      activeCell = nil
+      cell = nil
     } else {
-      activeCell = CellIndex(row: row, col: col)
+      cell = CellIndex(row: row, col: col)
     }
-    activeCellSubject.on(.next(activeCell))
+    sequence.onNext(cell)
   }
 
   public func keyReceived(chs: String) {

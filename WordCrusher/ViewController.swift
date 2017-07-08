@@ -112,6 +112,7 @@ class ViewController: NSViewController {
   private func makeBoardViewModel(board: Board, boardView: BoardView) -> BoardViewModel {
     let boardViewModel = BoardViewModel(board: board,
                                         activeCell: boardView.rx.activeCell,
+                                        clickedCell: boardView.rx.click.asObservable(),
                                         charInput: boardView.rx.ch.asObservable())
     boardViewModel.boardChanged
       .subscribe(onNext: { [weak boardView] in

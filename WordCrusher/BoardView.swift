@@ -46,6 +46,8 @@ private func pathForPoly(points: [CGPoint]) -> CGPath {
 @objc protocol BoardViewDelegate {
   // (-1, -1) indicates no active cell
   @objc optional func activeCellChangedTo(row: Int, col: Int)
+  // (-1, -1) indicates no active cell
+  @objc optional func clickInCell(row: Int, col: Int)
   @objc optional func keyReceived(chs: String)
 }
 
@@ -226,6 +228,8 @@ extension BoardView {
 
   public override func mouseDown(with event: NSEvent) {
     let location = convert(event.locationInWindow, from: nil)
-    activeCell = cellContainingPoint(location)
+    let cell = cellContainingPoint(location)
+    
+    delegate?.clickInCell?(row: cell?.row ?? -1, col: cell?.col ?? -1)
   }
 }
