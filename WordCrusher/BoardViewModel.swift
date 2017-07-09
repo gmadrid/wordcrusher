@@ -72,8 +72,10 @@ class BoardViewModel {
       }
       .throttle(doubleClickInterval, scheduler: MainScheduler.instance)
       .map { $0.first!.0 }
-      .subscribe({ cell in
+      .subscribe(onNext: { cell in
         // Collapse the cell in here.
+        board.collapse(at: cell)
+        boardChanged.onNext(())
       })
       .disposed(by: disposeBag)
   }

@@ -171,6 +171,15 @@ class Board {
       self.isIndexInBoard(index: index)
     }
   }
+  
+  func collapse(at cellIndex: CellIndex) {
+    var index = arrayIndex(for: cellIndex)
+    while index >= numCols {
+      cells[index] = cells[index - numCols]
+      index -= numCols
+    }
+    cells[index] = .empty
+  }
 }
 
 extension Board {

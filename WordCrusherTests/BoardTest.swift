@@ -208,4 +208,30 @@ class BoardTest: XCTestCase {
 
     XCTAssertEqual(set, verificationSet)
   }
+  
+  func testCollapse() {
+    // The 4 x 4 board looks like:
+    //
+    //    B   D
+    //  A   C
+    //    F   H
+    //  E   G
+    //    J   L
+    //  I   K
+    //    N   P
+    //  M   O
+    board = Board(rows: 4, cols: 4, contents: "ABCDEFGHIJKLMNOP")
+    
+    board.collapse(at: CellIndex(row: 2, col: 1))
+    
+    zip(board, "a.cdebghifklmnop".characters).forEach { (cellIndex, ch) in
+      if ch == "." {
+        XCTAssertNil(board[cellIndex])
+      } else {
+        XCTAssertEqual(ch, board[cellIndex])
+      }
+      
+    }
+    
+  }
 }
